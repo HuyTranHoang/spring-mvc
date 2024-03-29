@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/master}">
+<head>
+    <title>List customer</title>
+</head>
+<body>
+
+<section layout:fragment="content">
+    <p class="text-primary">This is a paragraph from content page 1</p>
+    <h1 th:text="|Hello ${name}|" class="test"></h1>
+</section>
+</body>
+</html>
