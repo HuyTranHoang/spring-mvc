@@ -10,7 +10,7 @@ public class CustomerController {
 
     @RequestMapping("/list")
     public String listCustomers(Model model) {
-        model.addAttribute("name", "huy");
+        model.addAttribute("name", "huyokla");
         return "list-customers";
     }
 }
