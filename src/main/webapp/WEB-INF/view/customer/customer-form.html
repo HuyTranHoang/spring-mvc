@@ -3,38 +3,48 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/master}">
 <head>
-    <title>List customer</title>
+    <title>Add customer</title>
 </head>
 <body>
 
-<main layout:fragment="content" style="width: 600px">
+<!--/*@thymesVar id="customer" type="com.huy.crm.entity.Customer"*/-->
+<div class="d-sm-flex align-items-center justify-content-between mb-4" layout:fragment="page-heading">
+    <h1 class="h3 mb-0 text-gray-800" th:if="${customer.id == 0}">Create new customer</h1>
+    <h1 class="h3 mb-0 text-gray-800" th:if="${customer.id != 0}">Update customer</h1>
 
+    <a th:href="@{/customer/list}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+        <i class="fa-solid fa-plus"></i> Back to list</a>
+</div>
 
-    <div class="mb-3">
-        <h3>Add new customer</h3>
-        <a th:href="@{/customer/list}">Back to list</a>
+<main layout:fragment="content" class="col-4">
+
+    <div class="bg-gradient-primary-50 p-4 rounded">
+        <form action="#" th:action="@{/customer/save}" th:object="${customer}" method="post">
+
+            <input type="hidden" th:field="*{id}">
+
+            <div class="mb-3">
+                <label for="firstName" class="form-label text-white">First name</label>
+                <input type="text" class="form-control" id="firstName" placeholder="first name" th:field="*{firstName}">
+            </div>
+
+            <div class="mb-3">
+                <label for="lastName" class="form-label text-white">Last name</label>
+                <input type="text" class="form-control" id="lastName" placeholder="last name" th:field="*{lastName}">
+            </div>
+
+            <div class="mb-5">
+                <label for="email" class="form-label text-white">Email</label>
+                <input type="text" class="form-control"  id="email" placeholder="email" th:field="*{email}">
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-success" style="width: 150px">Save</button>
+            </div>
+
+        </form>
     </div>
 
-    <!--/*@thymesVar id="customer" type="com.huy.crm.entity.Customer"*/-->
-    <form action="#" th:action="@{/customer/save}" th:object="${customer}" method="post">
-
-        <div class="mb-3">
-            <label for="firstName" class="form-label">First name</label>
-            <input type="text" class="form-control" id="firstName" placeholder="first name" th:field="*{firstName}">
-        </div>
-
-        <div class="mb-3">
-            <label for="lastName" class="form-label">Last name</label>
-            <input type="text" class="form-control" id="lastName" placeholder="last name" th:field="*{lastName}">
-        </div>
-
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="text" class="form-control"  id="email" placeholder="email" th:field="*{email}">
-        </div>
-
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
 
 </main>
 

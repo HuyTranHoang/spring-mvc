@@ -2,13 +2,16 @@ package com.huy.crm.dao.impl;
 
 import com.huy.crm.dao.CustomerDAO;
 import com.huy.crm.entity.Customer;
+import lombok.extern.java.Log;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
+@Log
 public class CustomerDAOImpl implements CustomerDAO {
 
     private final SessionFactory sessionFactory;
@@ -25,7 +28,27 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
+    public Customer getCustomer(int id) {
+        return sessionFactory.getCurrentSession()
+                .get(Customer.class, id);
+    }
+
+
+    @Override
     public void saveCustomer(Customer customer) {
         sessionFactory.getCurrentSession().saveOrUpdate(customer);
+    }
+
+    @Override
+    public void deleteCustomer(int customerId) {
+        try {
+            sessionFactory.getCurrentSession()
+                    .createQuery("delete from Customer where id = :customerId")
+                    .setParameter("customerId", customerId)
+                    .executeUpdate();
+        } catch (Exception e) {
+            log.info("Error: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

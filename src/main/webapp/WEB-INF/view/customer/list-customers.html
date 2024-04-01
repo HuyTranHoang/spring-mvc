@@ -1,41 +1,90 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/master}">
+>
 <head>
-    <title>List customer</title>
+    <meta charset="UTF-8">
+    <title>Customer list</title>
 </head>
 <body>
 
-<main layout:fragment="content">
+<div class="d-sm-flex align-items-center justify-content-between mb-4" layout:fragment="page-heading">
+    <h1 class="h3 mb-0 text-gray-800">Customers list</h1>
 
+    <a th:href="@{new}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+        <i class="fa-solid fa-plus"></i> Create new customer</a>
+</div>
+
+<main class="col-12" layout:fragment="content">
     <div>
-        <h2>List of customers</h2>
-        <a th:href="@{new}">Add new customer</a>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+                <th scope="col">Email</th>
+                <th scope="col" style="width: 10%">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="customer, iterStat: ${customers}">
+                <th scope="row" th:text="${iterStat.index + 1}"></th>
+                <!--/*@thymesVar id="customer" type="com.huy.crm.entity.Customer"*/-->
+                <td th:text="${customer.firstName}"></td>
+                <td th:text="${customer.lastName}"></td>
+                <td th:text="${customer.email}"></td>
+                <td>
+                    <a th:href="@{view/{id}(id=${customer.id})}" class="text-decoration-none mr-3">
+                        <i class="fa-solid fa-eye text-info"></i>
+                    </a>
+                    <a th:href="@{edit/{id}(id=${customer.id})}" class="text-decoration-none mr-3">
+                        <i class="fa-solid fa-pen-to-square text-warning"></i>
+                    </a>
+
+                    <a th:onclick="|confirmDelete(${customer.id})|" class="text-decoration-none text-danger " style="cursor: pointer">
+                        <i class="fa-solid fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Email</th>
-            <th scope="col">Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="customer, iterStat : ${customers}">
-            <!--/*@thymesVar id="customer" type="com.huy.crm.entity.Customer"*/-->
-            <th scope="row" th:text="${iterStat.index + 1}"></th>
-            <td th:text="${customer.firstName}"></td>
-            <td th:text="${customer.lastName}"></td>
-            <td th:text="${customer.email}"></td>
-            <td>Edit  | Delete</td>
-        </tr>
-        </tbody>
-    </table>
+    <form id="deleteForm" method="post"></form>
 </main>
+
+<script th:if="${message != null}" th:inline="javascript" layout:fragment="myNotification">
+    const message = /*[[${message}]]*/ 'default';
+
+    Swal.fire({
+        title: "Success",
+        text: message,
+        icon: "success"
+    });
+</script>
+
+<script layout:fragment="myScript" th:inline="javascript">
+    function confirmDelete(id) {
+        Swal.fire({
+            title: `Are you sure delete customer with id ${id}?`,
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const url = /*[[@{/customer/delete/}]]*/ '';
+                const deleteForm = document.getElementById('deleteForm');
+                deleteForm.action = url + id;
+                deleteForm.submit();
+            }
+        });
+    }
+</script>
 
 </body>
 </html>
