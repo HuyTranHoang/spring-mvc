@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/master}">
+<head>
+    <title>List customer</title>
+</head>
+<body>
+
+<main layout:fragment="content">
+
+    <div>
+        <h2>List of customers</h2>
+        <a th:href="@{new}">Add new customer</a>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Email</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="customer, iterStat : ${customers}">
+            <!--/*@thymesVar id="customer" type="com.huy.crm.entity.Customer"*/-->
+            <th scope="row" th:text="${iterStat.index + 1}"></th>
+            <td th:text="${customer.firstName}"></td>
+            <td th:text="${customer.lastName}"></td>
+            <td th:text="${customer.email}"></td>
+            <td>Edit  | Delete</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+
+</body>
+</html>

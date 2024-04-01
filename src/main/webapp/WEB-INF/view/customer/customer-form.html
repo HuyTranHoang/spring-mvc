@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/master}">
+<head>
+    <title>List customer</title>
+</head>
+<body>
+
+<main layout:fragment="content" style="width: 600px">
+
+
+    <div class="mb-3">
+        <h3>Add new customer</h3>
+        <a th:href="@{/customer/list}">Back to list</a>
+    </div>
+
+    <!--/*@thymesVar id="customer" type="com.huy.crm.entity.Customer"*/-->
+    <form action="#" th:action="@{/customer/save}" th:object="${customer}" method="post">
+
+        <div class="mb-3">
+            <label for="firstName" class="form-label">First name</label>
+            <input type="text" class="form-control" id="firstName" placeholder="first name" th:field="*{firstName}">
+        </div>
+
+        <div class="mb-3">
+            <label for="lastName" class="form-label">Last name</label>
+            <input type="text" class="form-control" id="lastName" placeholder="last name" th:field="*{lastName}">
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="text" class="form-control"  id="email" placeholder="email" th:field="*{email}">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+</main>
+
+</body>
+</html>
