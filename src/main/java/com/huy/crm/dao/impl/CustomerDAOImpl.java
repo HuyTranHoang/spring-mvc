@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@Log
 public class CustomerDAOImpl implements CustomerDAO {
 
     private final SessionFactory sessionFactory;
@@ -36,19 +35,15 @@ public class CustomerDAOImpl implements CustomerDAO {
 
     @Override
     public void saveCustomer(Customer customer) {
-        sessionFactory.getCurrentSession().saveOrUpdate(customer);
+        sessionFactory.getCurrentSession()
+                .saveOrUpdate(customer);
     }
 
     @Override
     public void deleteCustomer(int customerId) {
-        try {
-            sessionFactory.getCurrentSession()
-                    .createQuery("delete from Customer where id = :customerId")
-                    .setParameter("customerId", customerId)
-                    .executeUpdate();
-        } catch (Exception e) {
-            log.info("Error: " + e.getMessage());
-            e.printStackTrace();
-        }
+        sessionFactory.getCurrentSession()
+                .createQuery("delete from Customer where id = :customerId")
+                .setParameter("customerId", customerId)
+                .executeUpdate();
     }
 }

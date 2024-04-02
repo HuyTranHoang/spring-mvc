@@ -56,12 +56,14 @@
 </main>
 
 <script th:if="${message != null}" th:inline="javascript" layout:fragment="myNotification">
+    const title = /*[[${title}]]*/ 'Success';
     const message = /*[[${message}]]*/ 'default';
+    const icon = /*[[${icon}]]*/ 'success';
 
     Swal.fire({
-        title: "Success",
+        title: title,
         text: message,
-        icon: "success"
+        icon: icon
     });
 </script>
 

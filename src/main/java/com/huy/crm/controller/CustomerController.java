@@ -4,10 +4,12 @@ import com.huy.crm.entity.Customer;
 import com.huy.crm.service.CustomerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,23 +57,43 @@ public class CustomerController {
 
     @PostMapping("/delete/{id}")
     public String deleteCustomer(@PathVariable int id, RedirectAttributes ra) {
-        customerService.deleteCustomer(id);
+        Optional<Customer> customerOptional = customerService.getCustomer(id);
 
-        ra.addFlashAttribute("message", "Customer deleted successfully!");
+        if (!customerOptional.isPresent()) {
+            setNotification(ra, "Error", "Customer not found!", "error");
+            return "redirect:/customer/list";
+        }
+
+        customerService.deleteCustomer(id);
+        setNotification(ra, "Success", "Customer deleted successfully!", "success");
 
         return "redirect:/customer/list";
     }
 
     @PostMapping("/save")
-    public String saveCustomer(@ModelAttribute("customer") Customer customer, RedirectAttributes ra) {
+    public String saveCustomer(@Valid @ModelAttribute("customer") Customer customer,
+                               BindingResult result,
+                               RedirectAttributes ra,
+                               Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("customer", customer);
+            return "customer/customer-form";
+        }
+
         customerService.saveCustomer(customer);
 
         if (customer.getId() == 0) {
-            ra.addFlashAttribute("message", "Customer added successfully!");
+            setNotification(ra, "Success", "Customer added successfully!", "success");
         } else {
-            ra.addFlashAttribute("message", "Customer updated successfully!");
+            setNotification(ra, "Success", "Customer updated successfully!", "success");
         }
 
         return "redirect:/customer/list";
+    }
+
+    private void setNotification(RedirectAttributes ra, String title, String message, String icon) {
+        ra.addFlashAttribute("title", title);
+        ra.addFlashAttribute("message", message);
+        ra.addFlashAttribute("icon", icon);
     }
 }
