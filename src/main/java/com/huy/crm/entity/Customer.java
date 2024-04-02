@@ -3,6 +3,7 @@ package com.huy.crm.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 @Getter
@@ -10,7 +11,6 @@ import javax.validation.constraints.NotEmpty;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Entity
 @Table(name = "customers")
 public class Customer {
@@ -28,5 +28,6 @@ public class Customer {
 
     @Column(name = "email", length = 250)
     @NotEmpty(message = "Email is required")
+    @Email(message = "Invalid email format")
     private String email;
 }

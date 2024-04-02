@@ -29,8 +29,8 @@ public class CustomerController {
     }
 
     @GetMapping("/list")
-    public String listCustomers(Model model) {
-        List<Customer> customers = customerService.getCustomers();
+    public String listCustomers(@RequestParam(required = false) String search, Model model) {
+        List<Customer> customers = customerService.getCustomers(search);
         model.addAttribute("customers", customers);
         return "customer/list-customers";
     }

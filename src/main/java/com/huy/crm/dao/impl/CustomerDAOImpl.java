@@ -20,7 +20,14 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
-    public List<Customer> getCustomers() {
+    public List<Customer> getCustomers(String search) {
+        if (search != null && !search.trim().isEmpty()) {
+            return sessionFactory.getCurrentSession()
+                    .createQuery("from Customer where lower(firstName) like :search or lower(lastName) like :search", Customer.class)
+                    .setParameter("search", "%" + search.toLowerCase() + "%")
+                    .getResultList();
+        }
+
         return sessionFactory.getCurrentSession()
                 .createQuery("from Customer", Customer.class)
                 .getResultList();

@@ -12,14 +12,27 @@
 <div class="d-sm-flex align-items-center justify-content-between mb-4" layout:fragment="page-heading">
     <h1 class="h3 mb-0 text-gray-800">Customers list</h1>
 
+    <form class="d-flex form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+        <div class="input-group mr-3">
+            <input type="text" name="search" class="form-control small" placeholder="Search for...">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                    <i class="fas fa-search fa-sm"></i>
+                </button>
+            </div>
+        </div>
+
+        <a th:if="${param.search}" th:href="@{list}" class="btn btn-warning">Clear</a>
+    </form>
+
     <a th:href="@{new}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
         <i class="fa-solid fa-plus"></i> Create new customer</a>
 </div>
 
 <main class="col-12" layout:fragment="content">
     <div>
-        <table class="table">
-            <thead>
+        <table class="table table-striped">
+            <thead class="table-primary">
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">First</th>
@@ -28,7 +41,7 @@
                 <th scope="col" style="width: 10%">Actions</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody class="table-light">
             <tr th:each="customer, iterStat: ${customers}">
                 <th scope="row" th:text="${iterStat.index + 1}"></th>
                 <!--/*@thymesVar id="customer" type="com.huy.crm.entity.Customer"*/-->
@@ -43,7 +56,8 @@
                         <i class="fa-solid fa-pen-to-square text-warning"></i>
                     </a>
 
-                    <a th:onclick="|confirmDelete(${customer.id})|" class="text-decoration-none text-danger " style="cursor: pointer">
+                    <a th:onclick="|confirmDelete(${customer.id})|" class="text-decoration-none text-danger "
+                       style="cursor: pointer">
                         <i class="fa-solid fa-trash"></i>
                     </a>
                 </td>
@@ -54,18 +68,6 @@
 
     <form id="deleteForm" method="post"></form>
 </main>
-
-<script th:if="${message != null}" th:inline="javascript" layout:fragment="myNotification">
-    const title = /*[[${title}]]*/ 'Success';
-    const message = /*[[${message}]]*/ 'default';
-    const icon = /*[[${icon}]]*/ 'success';
-
-    Swal.fire({
-        title: title,
-        text: message,
-        icon: icon
-    });
-</script>
 
 <script layout:fragment="myScript" th:inline="javascript">
     function confirmDelete(id) {

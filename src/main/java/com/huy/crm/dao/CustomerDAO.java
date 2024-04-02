@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CustomerDAO {
-    List<Customer> getCustomers();
+    List<Customer> getCustomers(String search);
 
     Customer getCustomer(int id);
 

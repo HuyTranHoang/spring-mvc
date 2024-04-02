@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CustomerService {
-    List<Customer> getCustomers();
+    List<Customer> getCustomers(String search);
 
     Optional<Customer> getCustomer(int id);
 
