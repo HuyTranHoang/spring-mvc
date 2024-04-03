@@ -10,11 +10,26 @@
 <body>
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4" layout:fragment="page-heading">
-    <h1 class="h3 mb-0 text-gray-800">Customers list</h1>
+    <h1 class="h3 mb-0 text-primary">Customers list</h1>
 
-    <form class="d-flex form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+    <div class="divider"></div>
+
+    <!--/*@thymesVar id="customerParams" type="com.huy.crm.dto.CustomerParams"*/-->
+    <form class="d-flex form-inline mr-auto my-2 my-md-0 mw-100 navbar-search" id="searchForm" th:object="${customerParams}">
+        <label for="sort" class="mr-2">Sort by:</label>
+
+        <div class="select-wrapper">
+            <select class="form-control pr-5 mr-3" id="sort" name="sort" th:field="*{sort}" onchange="this.form.submit()">
+                <option value="default">Default</option>
+                <option value="firstNameAsc">First name ASC</option>
+                <option value="lastNameAsc">Last name ASC</option>
+                <option value="emailAsc">Email ASC</option>
+                <option value="emailDesc">Email DESC</option>
+            </select>
+        </div>
+
         <div class="input-group mr-3">
-            <input type="text" name="search" class="form-control small" placeholder="Search for...">
+            <input type="text" name="search" class="form-control small" placeholder="Search for..." th:field="*{search}">
             <div class="input-group-append">
                 <button class="btn btn-primary" type="submit">
                     <i class="fas fa-search fa-sm"></i>
@@ -72,7 +87,7 @@
 <script layout:fragment="myScript" th:inline="javascript">
     function confirmDelete(id) {
         Swal.fire({
-            title: `Are you sure delete customer with id ${id}?`,
+            title: "Are you sure?",
             text: "You won't be able to revert this!",
             icon: "warning",
             showCancelButton: true,

@@ -1,3 +1,22 @@
-h1 {
-    color: red;
+select {
+    -webkit-appearance: none;
+    appearance: none;
+}
+.select-wrapper {
+    position: relative;
+}
+
+.select-wrapper::after {
+    content: '\f0d7';
+    top: 9px;
+    right: 26px;
+    position: absolute;
+    font: normal 900 1em / 1 "Font Awesome 6 Pro";
+}
+
+.divider {
+    width: 0;
+    border-right: 1px solid #4e73df;
+    height: calc(4.375rem - 2rem);
+    margin: auto 1rem;
 }

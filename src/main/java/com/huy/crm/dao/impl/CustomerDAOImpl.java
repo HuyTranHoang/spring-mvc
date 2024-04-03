@@ -1,10 +1,16 @@
 package com.huy.crm.dao.impl;
 
 import com.huy.crm.dao.CustomerDAO;
+import com.huy.crm.dto.CustomerParams;
 import com.huy.crm.entity.Customer;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -18,23 +24,66 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
-    public List<Customer> getCustomers(String search) {
+    public List<Customer> getCustomers(CustomerParams customerParams) {
+        String search = customerParams.getSearch();
+        String sort = customerParams.getSort();
+
+        CriteriaBuilder builder = sessionFactory.getCriteriaBuilder();
+
+        CriteriaQuery<Customer> query = builder.createQuery(Customer.class);
+
+        Root<Customer> root = query.from(Customer.class);
+
+        // Tạo danh sách Predicate để thêm điều kiện
+        List<Predicate> predicates = new ArrayList<>();
+
         if (search != null && !search.trim().isEmpty()) {
-            return sessionFactory.getCurrentSession()
-                    .createQuery("from Customer where lower(firstName) like :search or lower(lastName) like :search", Customer.class)
-                    .setParameter("search", "%" + search.toLowerCase() + "%")
-                    .getResultList();
+            Predicate firstNamePredicate = builder.like(builder.lower(root.get("firstName")), "%" + search.toLowerCase() + "%");
+            Predicate lastNamePredicate = builder.like(builder.lower(root.get("lastName")), "%" + search.toLowerCase() + "%");
+
+            predicates.add(builder.or(firstNamePredicate, lastNamePredicate));
+        }
+
+        // Thêm tất cả các điều kiện vào CriteriaQuery
+        query.where(predicates.toArray(new Predicate[0]));
+
+        if (sort != null && !sort.isEmpty()) {
+            switch (sort) {
+                case "firstNameDesc":
+                    query.orderBy(builder.asc(root.get("firstName")));
+                    break;
+                case "lastNameAsc":
+                    query.orderBy(builder.desc(root.get("lastName")));
+                    break;
+                case "emailAsc":
+                    query.orderBy(builder.desc(root.get("email")));
+                    break;
+                case "emailDesc":
+                    query.orderBy(builder.asc(root.get("email")));
+                    break;
+                default:
+                    query.orderBy(builder.asc(root.get("id")));
+                    break;
+            }
         }
 
         return sessionFactory.getCurrentSession()
-                .createQuery("from Customer", Customer.class)
+                .createQuery(query)
                 .getResultList();
     }
 
     @Override
-    public Customer getCustomer(int id) {
+    public Customer getCustomerById(int id) {
         return sessionFactory.getCurrentSession()
                 .get(Customer.class, id);
+    }
+
+    @Override
+    public Customer getCustomerByEmail(String email) {
+        return sessionFactory.getCurrentSession()
+                .createQuery("from Customer where email = :email", Customer.class)
+                .setParameter("email", email)
+                .uniqueResult();
     }
 
 

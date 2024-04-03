@@ -1,5 +1,6 @@
 package com.huy.crm.controller;
 
+import com.huy.crm.dto.CustomerParams;
 import com.huy.crm.entity.Customer;
 import com.huy.crm.service.CustomerService;
 import org.springframework.stereotype.Controller;
@@ -29,8 +30,9 @@ public class CustomerController {
     }
 
     @GetMapping("/list")
-    public String listCustomers(@RequestParam(required = false) String search, Model model) {
-        List<Customer> customers = customerService.getCustomers(search);
+    public String listCustomers(@ModelAttribute CustomerParams customerParams, Model model) {
+        List<Customer> customers = customerService.getCustomers(customerParams);
+        model.addAttribute("customerParams", customerParams);
         model.addAttribute("customers", customers);
         return "customer/list-customers";
     }
@@ -43,10 +45,11 @@ public class CustomerController {
     }
 
     @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable int id, Model model) {
-        Optional<Customer> customerOptional = customerService.getCustomer(id);
+    public String showEditForm(@PathVariable int id, RedirectAttributes ra, Model model) {
+        Optional<Customer> customerOptional = customerService.getCustomerById(id);
 
         if (!customerOptional.isPresent()) {
+            setNotification(ra, "Error", "Customer not found!", "error");
             return "redirect:/customer/list";
         }
 
@@ -57,7 +60,8 @@ public class CustomerController {
 
     @PostMapping("/delete/{id}")
     public String deleteCustomer(@PathVariable int id, RedirectAttributes ra) {
-        Optional<Customer> customerOptional = customerService.getCustomer(id);
+        Optional<Customer> customerOptional = customerService.getCustomerById(id);
+
         if (!customerOptional.isPresent()) {
             setNotification(ra, "Error", "Customer not found!", "error");
             return "redirect:/customer/list";
@@ -75,6 +79,14 @@ public class CustomerController {
                                RedirectAttributes ra,
                                Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("customer", customer);
+            return "customer/customer-form";
+        }
+
+        Customer existingCustomer = customerService.getCustomerByEmail(customer.getEmail()).orElse(null);
+
+        if (existingCustomer != null && existingCustomer.getId() != customer.getId()) {
+            result.rejectValue("email", "error.customer", "Email already exists!");
             model.addAttribute("customer", customer);
             return "customer/customer-form";
         }

@@ -1,6 +1,7 @@
 package com.huy.crm.service.impl;
 
 import com.huy.crm.dao.CustomerDAO;
+import com.huy.crm.dto.CustomerParams;
 import com.huy.crm.entity.Customer;
 import com.huy.crm.service.CustomerService;
 import org.springframework.stereotype.Service;
@@ -20,14 +21,26 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
-    public List<Customer> getCustomers(String search) {
-        return customerDAO.getCustomers(search);
+    public List<Customer> getCustomers(CustomerParams customerParams) {
+        return customerDAO.getCustomers(customerParams);
     }
 
     @Override
     @Transactional
-    public Optional<Customer> getCustomer(int id) {
-        Customer customer = customerDAO.getCustomer(id);
+    public Optional<Customer> getCustomerById(int id) {
+        Customer customer = customerDAO.getCustomerById(id);
+
+        if (customer != null) {
+            return Optional.of(customer);
+        }
+
+        return Optional.empty();
+    }
+
+    @Override
+    @Transactional
+    public Optional<Customer> getCustomerByEmail(String email) {
+        Customer customer = customerDAO.getCustomerByEmail(email);
 
         if (customer != null) {
             return Optional.of(customer);
