@@ -58,7 +58,6 @@ public class CustomerController {
     @PostMapping("/delete/{id}")
     public String deleteCustomer(@PathVariable int id, RedirectAttributes ra) {
         Optional<Customer> customerOptional = customerService.getCustomer(id);
-
         if (!customerOptional.isPresent()) {
             setNotification(ra, "Error", "Customer not found!", "error");
             return "redirect:/customer/list";
@@ -80,13 +79,13 @@ public class CustomerController {
             return "customer/customer-form";
         }
 
-        customerService.saveCustomer(customer);
-
-        if (customer.getId() == 0) {
-            setNotification(ra, "Success", "Customer added successfully!", "success");
-        } else {
+        if (customer.getId() != 0){
             setNotification(ra, "Success", "Customer updated successfully!", "success");
+        } else {
+            setNotification(ra, "Success", "Customer added successfully!", "success");
         }
+
+        customerService.saveCustomer(customer);
 
         return "redirect:/customer/list";
     }

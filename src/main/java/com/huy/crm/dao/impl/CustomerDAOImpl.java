@@ -2,13 +2,11 @@ package com.huy.crm.dao.impl;
 
 import com.huy.crm.dao.CustomerDAO;
 import com.huy.crm.entity.Customer;
-import lombok.extern.java.Log;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
+
 
 @Repository
 public class CustomerDAOImpl implements CustomerDAO {
