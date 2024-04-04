@@ -20,3 +20,12 @@ select {
     height: calc(4.375rem - 2rem);
     margin: auto 1rem;
 }
+
+
+.myForm > div:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+.myForm > div:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.05);
+}

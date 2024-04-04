@@ -8,43 +8,67 @@
 <body>
 
 <!--/*@thymesVar id="customer" type="com.huy.crm.entity.Customer"*/-->
-<div class="d-sm-flex align-items-center justify-content-between mb-4" layout:fragment="page-heading">
-    <h1 class="h3 mb-0 text-gray-800" th:if="${customer.id == 0}">Create new customer</h1>
-    <h1 class="h3 mb-0 text-gray-800" th:if="${customer.id != 0}">Update customer</h1>
+<!--<div class="d-sm-flex align-items-center justify-content-between mb-4" layout:fragment="page-heading">-->
+<!--    <h1 class="h3 mb-0 text-primary" th:text="${customer.id == 0 ? 'Create new customer' : 'Update customer'}"></h1>-->
 
-    <a th:href="@{/customer/list}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-        <i class="fa-solid fa-plus"></i> Back to list</a>
-</div>
+<!--    <a th:href="@{/customer/list}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">-->
+<!--        <i class="fa-solid fa-plus"></i> Back to list</a>-->
+<!--</div>-->
 
-<main layout:fragment="content" class="col-4">
+<main layout:fragment="content" class="col-md-6">
 
-    <div class="bg-gradient-primary-50 p-4 rounded">
-        <form action="#" th:action="@{/customer/save}" th:object="${customer}" method="post">
+    <div class="px-3 pb-3 bg-white rounded border">
 
-            <input type="hidden" th:field="*{id}">
+        <div class="d-flex justify-content-between mt-4">
+            <h3 class="h3 mb-0 text-primary"
+                th:text="${customer.id == 0 ? 'Add new customer' : 'Update customer'}"></h3>
 
-            <div class="mb-3">
-                <label for="firstName" class="form-label text-white">First name <small class="text-warning">*</small></label>
-                <input type="text" class="form-control" id="firstName" placeholder="first name" th:field="*{firstName}">
-                <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="text-warning"></span>
+            <a th:href="@{/customer/list}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                <i class="fa-solid fa-arrow-left mr-2"></i> Back to list
+            </a>
+        </div>
+
+        <hr>
+
+        <form th:action="@{/customer/save}" th:object="${customer}" class="myForm" method="post">
+            <div class="row p-3">
+                <label for="firstName" class="col-sm-2 col-form-label text-right">
+                    First name <small class="text-danger">*</small>
+                </label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="firstName" placeholder="first name"
+                           th:field="*{firstName}">
+                    <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"
+                          class="text-danger"></span>
+                </div>
             </div>
 
-            <div class="mb-3">
-                <label for="lastName" class="form-label text-white">Last name <small class="text-warning">*</small></label>
-                <input type="text" class="form-control" id="lastName" placeholder="last name" th:field="*{lastName}">
-                <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="text-warning"></span>
+            <div class="row p-3">
+                <label for="lastName" class="col-sm-2 col-form-label text-right">
+                    Last name <small class="text-danger">*</small>
+                </label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="lastName" placeholder="last name"
+                           th:field="*{lastName}">
+                    <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="text-danger"></span>
+                </div>
             </div>
 
-            <div class="mb-5">
-                <label for="email" class="form-label text-white">Email <small class="text-warning">*</small></label>
-                <input type="text" class="form-control"  id="email" placeholder="email" th:field="*{email}">
-                <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-warning"></span>
+            <div class="row p-3">
+                <label for="email" class="col-sm-2 col-form-label text-right">
+                    Email <small class="text-danger">*</small>
+                </label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="email" placeholder="email" th:field="*{email}">
+                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
+                </div>
             </div>
+
+            <hr>
 
             <div class="d-flex justify-content-end">
-                <button type="submit" class="btn btn-success" style="width: 150px">Save</button>
+                <button type="submit" class="btn btn-primary" style="width: 150px">Save</button>
             </div>
-
         </form>
     </div>
 

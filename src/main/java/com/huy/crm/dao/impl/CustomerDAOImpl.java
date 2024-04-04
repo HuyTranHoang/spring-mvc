@@ -29,17 +29,19 @@ public class CustomerDAOImpl implements CustomerDAO {
         String sort = customerParams.getSort();
 
         CriteriaBuilder builder = sessionFactory.getCriteriaBuilder();
-
         CriteriaQuery<Customer> query = builder.createQuery(Customer.class);
-
         Root<Customer> root = query.from(Customer.class);
 
         // Tạo danh sách Predicate để thêm điều kiện
         List<Predicate> predicates = new ArrayList<>();
 
         if (search != null && !search.trim().isEmpty()) {
-            Predicate firstNamePredicate = builder.like(builder.lower(root.get("firstName")), "%" + search.toLowerCase() + "%");
-            Predicate lastNamePredicate = builder.like(builder.lower(root.get("lastName")), "%" + search.toLowerCase() + "%");
+            Predicate firstNamePredicate = builder.like(
+                    builder.lower(root.get("firstName")), "%" + search.toLowerCase() + "%"
+            );
+            Predicate lastNamePredicate = builder.like(
+                    builder.lower(root.get("lastName")), "%" + search.toLowerCase() + "%"
+            );
 
             predicates.add(builder.or(firstNamePredicate, lastNamePredicate));
         }
