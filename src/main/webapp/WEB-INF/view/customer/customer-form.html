@@ -30,16 +30,22 @@
 
         <hr>
 
-        <form th:action="@{/customer/save}" th:object="${customer}" class="myForm" method="post">
+        <form th:action="@{/customer/save}" th:object="${customer}" method="post" class="myForm needs-validation" novalidate>
+
+            <input type="hidden" th:field="*{id}">
+
             <div class="row p-3">
                 <label for="firstName" class="col-sm-2 col-form-label text-right">
                     First name <small class="text-danger">*</small>
                 </label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" id="firstName" placeholder="first name"
-                           th:field="*{firstName}">
+                           th:field="*{firstName}" required>
                     <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"
-                          class="text-danger"></span>
+                          class="text-danger small"></span>
+                    <span class="invalid-feedback small">
+                        First name is required.
+                    </span>
                 </div>
             </div>
 
@@ -49,8 +55,11 @@
                 </label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" id="lastName" placeholder="last name"
-                           th:field="*{lastName}">
-                    <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="text-danger"></span>
+                           th:field="*{lastName}" required>
+                    <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="text-danger small"></span>
+                    <span class="invalid-feedback small">
+                        Last name is required.
+                    </span>
                 </div>
             </div>
 
@@ -59,21 +68,35 @@
                     Email <small class="text-danger">*</small>
                 </label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="email" placeholder="email" th:field="*{email}">
-                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
+                    <input type="text" class="form-control" id="email" placeholder="email" th:field="*{email}" required>
+                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger small"></span>
+                    <span class="invalid-feedback small">
+                        Email is required.
+                    </span>
                 </div>
             </div>
 
             <hr>
 
-            <div class="d-flex justify-content-end">
+            <div class="d-flex justify-content-end bg-white">
                 <button type="submit" class="btn btn-primary" style="width: 150px">Save</button>
             </div>
         </form>
     </div>
 
-
 </main>
+
+<script layout:fragment="myScript">
+    $(document).ready(function () {
+        $('.myForm').submit(function (e) {
+            if (!this.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            $(this).addClass('was-validated');
+        });
+    });
+</script>
 
 </body>
 </html>

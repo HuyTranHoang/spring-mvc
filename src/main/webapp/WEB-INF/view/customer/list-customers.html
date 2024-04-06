@@ -57,9 +57,10 @@
             </tr>
             </thead>
             <tbody class="table-light">
+            <!--/*@thymesVar id="customers" type="java.util.List"*/-->
             <tr th:each="customer, iterStat: ${customers}">
-                <th scope="row" th:text="${iterStat.index + 1}"></th>
                 <!--/*@thymesVar id="customer" type="com.huy.crm.entity.Customer"*/-->
+                <th scope="row" th:text="${iterStat.index + 1}"></th>
                 <td th:text="${customer.firstName}"></td>
                 <td th:text="${customer.lastName}"></td>
                 <td th:text="${customer.email}"></td>
@@ -76,6 +77,10 @@
                         <i class="fa-solid fa-trash"></i>
                     </a>
                 </td>
+            </tr>
+
+            <tr th:if="${customers.isEmpty()}">
+                <td colspan="5" class="text-center">No data</td>
             </tr>
             </tbody>
         </table>
