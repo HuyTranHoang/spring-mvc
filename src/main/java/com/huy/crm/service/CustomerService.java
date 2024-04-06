@@ -9,6 +9,8 @@ import java.util.Optional;
 public interface CustomerService {
     List<Customer> getCustomers(CustomerParams customerParams);
 
+    int getCustomersCount(CustomerParams customerParams);
+
     Optional<Customer> getCustomerById(int id);
 
     Optional<Customer> getCustomerByEmail(String email);

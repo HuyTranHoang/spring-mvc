@@ -34,6 +34,12 @@ public class CustomerController {
         List<Customer> customers = customerService.getCustomers(customerParams);
         model.addAttribute("customerParams", customerParams);
         model.addAttribute("customers", customers);
+
+        int customersCount = customerService.getCustomersCount(customerParams);
+        int totalPages = (int) Math.ceil((double) customersCount / customerParams.getPageSize());
+        model.addAttribute("totalCount", customersCount);
+        model.addAttribute("totalPages", totalPages);
+
         return "customer/list-customers";
     }
 

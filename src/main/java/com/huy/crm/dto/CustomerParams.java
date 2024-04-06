@@ -3,12 +3,12 @@ package com.huy.crm.dto;
 
 import lombok.*;
 
-@Getter
 @Setter
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerParams {
+public class CustomerParams extends PaginationParams {
     private String search;
     private String sort;
 }

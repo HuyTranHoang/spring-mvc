@@ -69,10 +69,47 @@ public class CustomerDAOImpl implements CustomerDAO {
             }
         }
 
+        int page = customerParams.getPage();
+        int pageSize = customerParams.getPageSize();
+        int firstResult = (page - 1) * pageSize;
+
         return sessionFactory.getCurrentSession()
                 .createQuery(query)
+                .setFirstResult(firstResult)
+                .setMaxResults(pageSize)
                 .getResultList();
     }
+
+    @Override
+    public int getCustomersCount(CustomerParams customerParams) {
+        String search = customerParams.getSearch();
+
+        CriteriaBuilder builder = sessionFactory.getCriteriaBuilder();
+        CriteriaQuery<Long> query = builder.createQuery(Long.class);
+        Root<Customer> root = query.from(Customer.class);
+
+        query.select(builder.count(root));
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        if (search != null && !search.trim().isEmpty()) {
+            Predicate firstNamePredicate = builder.like(
+                    builder.lower(root.get("firstName")), "%" + search.toLowerCase() + "%"
+            );
+            Predicate lastNamePredicate = builder.like(
+                    builder.lower(root.get("lastName")), "%" + search.toLowerCase() + "%"
+            );
+
+            predicates.add(builder.or(firstNamePredicate, lastNamePredicate));
+        }
+
+        query.where(predicates.toArray(new Predicate[0]));
+
+        return Math.toIntExact(sessionFactory.getCurrentSession()
+                .createQuery(query)
+                .getSingleResult());
+    }
+
 
     @Override
     public Customer getCustomerById(int id) {

@@ -27,6 +27,12 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
+    public int getCustomersCount(CustomerParams customerParams) {
+        return customerDAO.getCustomersCount(customerParams);
+    }
+
+    @Override
+    @Transactional
     public Optional<Customer> getCustomerById(int id) {
         Customer customer = customerDAO.getCustomerById(id);
 
