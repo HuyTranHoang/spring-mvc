@@ -9,9 +9,6 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "customers")
 public class Customer {

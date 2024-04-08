@@ -24,6 +24,8 @@
 
     <mvc:resources mapping="/resources/**" location="/WEB-INF/resources/" />
 
+    <aop:aspectj-autoproxy />
+
 <!--    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
 <!--        <property name="prefix" value="/WEB-INF/view/" />-->
 <!--        <property name="suffix" value=".jsp" />-->
@@ -77,6 +79,5 @@
     </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
-
 
 </beans>

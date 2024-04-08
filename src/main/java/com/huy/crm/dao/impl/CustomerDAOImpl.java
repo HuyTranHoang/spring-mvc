@@ -1,5 +1,6 @@
 package com.huy.crm.dao.impl;
 
+import com.huy.crm.constant.SortCustomerColumn;
 import com.huy.crm.dao.CustomerDAO;
 import com.huy.crm.dto.CustomerParams;
 import com.huy.crm.entity.Customer;
@@ -51,16 +52,16 @@ public class CustomerDAOImpl implements CustomerDAO {
 
         if (sort != null && !sort.isEmpty()) {
             switch (sort) {
-                case "firstNameDesc":
+                case SortCustomerColumn.FIRST_NAME_ASC:
                     query.orderBy(builder.asc(root.get("firstName")));
                     break;
-                case "lastNameAsc":
+                case SortCustomerColumn.LAST_NAME_ASC:
                     query.orderBy(builder.desc(root.get("lastName")));
                     break;
-                case "emailAsc":
+                case SortCustomerColumn.EMAIL_ASC:
                     query.orderBy(builder.desc(root.get("email")));
                     break;
-                case "emailDesc":
+                case SortCustomerColumn.EMAIL_DESC:
                     query.orderBy(builder.asc(root.get("email")));
                     break;
                 default:
