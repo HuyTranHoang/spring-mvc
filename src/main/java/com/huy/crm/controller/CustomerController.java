@@ -1,5 +1,6 @@
 package com.huy.crm.controller;
 
+import com.huy.crm.constant.SortCustomerColumn;
 import com.huy.crm.dto.CustomerParams;
 import com.huy.crm.entity.Customer;
 import com.huy.crm.service.CustomerService;
@@ -39,6 +40,8 @@ public class CustomerController {
         int totalPages = (int) Math.ceil((double) customersCount / customerParams.getPageSize());
         model.addAttribute("totalCount", customersCount);
         model.addAttribute("totalPages", totalPages);
+
+        model.addAttribute("SortCustomerColumn", SortCustomerColumn.class);
 
         return "customer/list-customers";
     }

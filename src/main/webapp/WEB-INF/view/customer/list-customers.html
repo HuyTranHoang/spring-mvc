@@ -21,10 +21,11 @@
         <div class="select-wrapper">
             <select class="form-control pr-5 mr-3" id="sort" name="sort" th:field="*{sort}" onchange="this.form.submit()">
                 <option value="default">Default</option>
-                <option value="firstNameAsc">First name ASC</option>
-                <option value="lastNameAsc">Last name ASC</option>
-                <option value="emailAsc">Email ASC</option>
-                <option value="emailDesc">Email DESC</option>
+                <!--/*@thymesVar id="SortCustomerColumn" type="com.huy.crm.constant.SortCustomerColumn"*/-->
+                <option th:value="${SortCustomerColumn.FIRST_NAME_ASC}">First name ASC</option>
+                <option th:value="${SortCustomerColumn.LAST_NAME_ASC}">Last name ASC</option>
+                <option th:value="${SortCustomerColumn.EMAIL_ASC}">Email ASC</option>
+                <option th:value="${SortCustomerColumn.EMAIL_DESC}">Email DESC</option>
             </select>
         </div>
 
