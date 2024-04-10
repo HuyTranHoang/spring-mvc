@@ -30,7 +30,7 @@
 
         <hr>
 
-        <form th:action="@{/customer/save}" th:object="${customer}" method="post" class="myForm needs-validation" novalidate>
+        <form th:action="@{/customer/save}" th:object="${customer}" method="post" class="myForm needs-validation">
 
             <input type="hidden" th:field="*{id}">
 
@@ -40,12 +40,9 @@
                 </label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" id="firstName" placeholder="first name"
-                           th:field="*{firstName}" required>
+                           th:field="*{firstName}">
                     <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"
                           class="text-danger small"></span>
-                    <span class="invalid-feedback small">
-                        First name is required.
-                    </span>
                 </div>
             </div>
 
@@ -55,11 +52,8 @@
                 </label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" id="lastName" placeholder="last name"
-                           th:field="*{lastName}" required>
+                           th:field="*{lastName}">
                     <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="text-danger small"></span>
-                    <span class="invalid-feedback small">
-                        Last name is required.
-                    </span>
                 </div>
             </div>
 
@@ -68,11 +62,8 @@
                     Email <small class="text-danger">*</small>
                 </label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="email" placeholder="email" th:field="*{email}" required>
+                    <input type="text" class="form-control" id="email" placeholder="email" th:field="*{email}">
                     <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger small"></span>
-                    <span class="invalid-feedback small">
-                        Email is required.
-                    </span>
                 </div>
             </div>
 
@@ -87,15 +78,52 @@
 </main>
 
 <script layout:fragment="myScript">
-    $(document).ready(function () {
-        $('.myForm').submit(function (e) {
-            if (!this.checkValidity()) {
-                e.preventDefault();
-                e.stopPropagation();
+    $(function() {
+        $('.myForm').validate({
+            rules: {
+                firstName: {
+                    required: true,
+                    minlength: 2
+                },
+                lastName: {
+                    required: true,
+                    minlength: 2
+                },
+                email: {
+                    required: true,
+                    email: true
+                }
+            },
+            messages: {
+                firstName: {
+                    required: 'First name is required.',
+                    minlength: 'First name must be at least 2 characters.'
+                },
+                lastName: {
+                    required: 'Last name is required.',
+                    minlength: 'Last name must be at least 2 characters.'
+                },
+                email: {
+                    required: 'Email is required.',
+                    email: 'Email is invalid.'
+                }
+            },
+            errorElement: 'span',
+            errorPlacement: function(error, element) {
+                error.addClass('text-danger');
+                error.insertAfter(element);
+            },
+            highlight: function(element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            },
+            submitHandler: function(form) {
+                form.submit();
             }
-            $(this).addClass('was-validated');
         });
-    });
+    })
 </script>
 
 </body>

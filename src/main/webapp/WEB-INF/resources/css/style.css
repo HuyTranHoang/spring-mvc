@@ -29,3 +29,8 @@ select {
 .myForm > div:nth-child(even) {
     background-color: rgba(0, 0, 0, 0.05);
 }
+
+span.error {
+    color: red;
+    font-size: 0.8em;
+}
