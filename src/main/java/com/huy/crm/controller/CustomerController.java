@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/customer")
+@RequestMapping(value = "/customer", produces = "text/plain; charset=UTF-8")
 public class CustomerController {
 
     private final CustomerService customerService;
@@ -79,7 +79,7 @@ public class CustomerController {
         return "redirect:/customer/list";
     }
 
-    @PostMapping("/save")
+    @PostMapping(value = "/save")
     public String saveCustomer(@Valid @ModelAttribute("customer") Customer customer,
                                BindingResult result,
                                RedirectAttributes ra,

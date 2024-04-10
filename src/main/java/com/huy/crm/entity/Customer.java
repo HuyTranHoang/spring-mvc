@@ -10,6 +10,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @Entity
+@ToString
 @Table(name = "customers")
 public class Customer {
     @Id

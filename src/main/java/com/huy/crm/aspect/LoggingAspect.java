@@ -27,7 +27,7 @@ public class LoggingAspect {
     private void forAppFlow() {
     }
 
-    @Before("forAppFlow()")
+    @Before("forServicePackage()")
     public void before(JoinPoint joinPoint) {
         String method = joinPoint.getSignature().toShortString();
         logger.info("=====>>> in @Before: calling method: {}", method);
