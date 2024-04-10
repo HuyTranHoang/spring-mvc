@@ -20,12 +20,12 @@
 
 </head>
 
-<body class="bg-gradient-primary">
+<body class="" th:style="|background:url(@{/resources/images/login-background.png});|">
 
 <div class="container">
 
     <!-- Outer Row -->
-    <div class="row justify-content-center">
+    <div class="row justify-content-center align-items-center vh-100">
 
         <div class="col-xl-10 col-lg-12 col-md-9">
 
@@ -33,11 +33,18 @@
                 <div class="card-body p-0">
                     <!-- Nested Row within Card Body -->
                     <div class="row">
-                        <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                        <div class="col-lg-6 d-none d-lg-block position-relative">
+                            <img th:src="@{/resources/images/left-login-form.jpg}" alt="login-image"
+                                 style="object-fit: cover; object-position: center; height: 100%; width: 100%;"
+                                 class="img-fluid">
+                            <i class="fa-solid fa-heart fa-beat ml-2 position-absolute" style="color: #74C0FC; top: 10%"></i>
+                        </div>
                         <div class="col-lg-6">
                             <div class="p-5">
                                 <div class="text-center">
-                                    <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
+                                    <h1 class="h4 text-gray-900 mb-4">
+                                        Welcome Back!
+                                    </h1>
                                 </div>
                                 <div th:if="${param.error}" class="alert alert-danger">
                                     <strong>Invalid username or password!</strong>
@@ -69,19 +76,19 @@
                                         Login
                                     </button>
                                     <hr>
-                                    <a href="index.html" class="btn btn-google btn-user btn-block">
+                                    <a href="#" class="btn btn-google btn-user btn-block">
                                         <i class="fab fa-google fa-fw"></i> Login with Google
                                     </a>
-                                    <a href="index.html" class="btn btn-facebook btn-user btn-block">
+                                    <a href="#" class="btn btn-facebook btn-user btn-block">
                                         <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
                                     </a>
                                 </form>
                                 <hr>
                                 <div class="text-center">
-                                    <a class="small" href="forgot-password.html">Forgot Password?</a>
+                                    <a class="small" href="#">Forgot Password?</a>
                                 </div>
                                 <div class="text-center">
-                                    <a class="small" href="register.html">Create an Account!</a>
+                                    <a class="small" href="#">Create an Account!</a>
                                 </div>
                             </div>
                         </div>

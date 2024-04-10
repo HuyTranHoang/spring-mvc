@@ -42,7 +42,10 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests()
-                .anyRequest().authenticated()
+                .requestMatchers("/resources/images/**", "/resources/css/**", "/resources/js/**", "/login", "/logout")
+                .permitAll()
+                .anyRequest()
+                .authenticated()
                 .and()
                 .formLogin(form -> form.loginPage("/login")
                         .defaultSuccessUrl("/customer/list")

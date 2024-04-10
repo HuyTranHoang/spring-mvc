@@ -1,6 +1,5 @@
 package com.huy.crm.controller;
 
-import com.huy.crm.constant.SortCustomerColumn;
 import com.huy.crm.dto.CustomerParams;
 import com.huy.crm.entity.Customer;
 import com.huy.crm.service.CustomerService;
@@ -40,8 +39,6 @@ public class CustomerController {
         int totalPages = (int) Math.ceil((double) customersCount / customerParams.getPageSize());
         model.addAttribute("totalCount", customersCount);
         model.addAttribute("totalPages", totalPages);
-
-        model.addAttribute("SortCustomerColumn", SortCustomerColumn.class);
 
         return "customer/list-customers";
     }
@@ -96,11 +93,11 @@ public class CustomerController {
 
         if (customerOptional.isPresent() && customer.getId() != customerOptional.get().getId()) {
             model.addAttribute("customer", customer);
-            result.rejectValue("email", null, "Email is already in use!");
+            result.rejectValue("email", "customer.email", "Email is already in use!");
             return "customer/customer-form";
         }
 
-        if (customer.getId() != 0){
+        if (customer.getId() != 0) {
             setNotification(ra, "Success", "Customer updated successfully!", "success");
         } else {
             setNotification(ra, "Success", "Customer added successfully!", "success");

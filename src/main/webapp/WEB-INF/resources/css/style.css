@@ -2,6 +2,7 @@ select {
     -webkit-appearance: none;
     appearance: none;
 }
+
 .select-wrapper {
     position: relative;
 }

@@ -33,8 +33,6 @@ public class CustomerDAOImpl implements CustomerDAO {
         CriteriaQuery<Customer> query = builder.createQuery(Customer.class);
         Root<Customer> root = query.from(Customer.class);
 
-        // Tạo danh sách Predicate để thêm điều kiện
-        List<Predicate> predicates = new ArrayList<>();
 
         if (search != null && !search.trim().isEmpty()) {
             Predicate firstNamePredicate = builder.like(
@@ -44,11 +42,9 @@ public class CustomerDAOImpl implements CustomerDAO {
                     builder.lower(root.get("lastName")), "%" + search.toLowerCase() + "%"
             );
 
-            predicates.add(builder.or(firstNamePredicate, lastNamePredicate));
+            query.where(builder.or(firstNamePredicate, lastNamePredicate));
         }
 
-        // Thêm tất cả các điều kiện vào CriteriaQuery
-        query.where(predicates.toArray(new Predicate[0]));
 
         if (sort != null && !sort.isEmpty()) {
             switch (sort) {
