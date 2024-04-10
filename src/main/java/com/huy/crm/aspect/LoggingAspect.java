@@ -30,19 +30,19 @@ public class LoggingAspect {
     @Before("forAppFlow()")
     public void before(JoinPoint joinPoint) {
         String method = joinPoint.getSignature().toShortString();
-        logger.info("=====>>> in @Before: calling method: " + method);
+        logger.info("=====>>> in @Before: calling method: {}", method);
 
         Object[] args = joinPoint.getArgs();
         for (Object arg : args) {
-            logger.info("=====>>> argument: " + arg);
+            logger.info("=====>>> argument: {}", arg);
         }
     }
 
     @AfterReturning(pointcut = "forAppFlow()", returning = "result")
     public void afterReturning(JoinPoint joinPoint, Object result) {
         String method = joinPoint.getSignature().toShortString();
-        logger.info("=====>>> in @AfterReturning: from method: " + method);
+        logger.info("=====>>> in @AfterReturning: from method: {}", method);
 
-        logger.info("=====>>> result: " + result);
+        logger.info("=====>>> result: {}", result);
     }
 }

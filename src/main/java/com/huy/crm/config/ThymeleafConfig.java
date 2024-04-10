@@ -1,7 +1,6 @@
 package com.huy.crm.config;
 
 import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +12,6 @@ import org.thymeleaf.templatemode.TemplateMode;
 @Configuration
 public class ThymeleafConfig {
 
-    @Autowired
     private ApplicationContext applicationContext;
 
     @Bean
