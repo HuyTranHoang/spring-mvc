@@ -1,7 +1,6 @@
 package com.huy.crm.config;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
-import lombok.extern.java.Log;
 import org.springframework.context.annotation.*;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -9,11 +8,11 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import java.beans.PropertyVetoException;
 import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
-@Log
 public class HibernateConfiguration {
     private Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
@@ -23,22 +22,17 @@ public class HibernateConfiguration {
     }
 
     @Bean
-    public DataSource dataSource() {
+    public DataSource dataSource() throws PropertyVetoException {
         ComboPooledDataSource dataSource = new ComboPooledDataSource();
-        try {
-            dataSource.setDriverClass("com.mysql.cj.jdbc.Driver");
-            dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/c2202l_spring_crm?useSSL=false");
-            dataSource.setUser("root");
-            dataSource.setPassword("root");
-        } catch (Exception e) {
-            log.severe("Error: " + e.getMessage());
-        }
-
+        dataSource.setDriverClass("com.mysql.cj.jdbc.Driver");
+        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/c2202l_spring_crm?useSSL=false");
+        dataSource.setUser("root");
+        dataSource.setPassword("root");
         return dataSource;
     }
 
     @Bean
-    public LocalSessionFactoryBean sessionFactory() {
+    public LocalSessionFactoryBean sessionFactory() throws PropertyVetoException {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
         sessionFactory.setPackagesToScan("com.huy.crm.entity");
@@ -47,7 +41,7 @@ public class HibernateConfiguration {
     }
 
     @Bean
-    public PlatformTransactionManager transactionManager() {
+    public PlatformTransactionManager transactionManager() throws PropertyVetoException {
         HibernateTransactionManager transactionManager = new HibernateTransactionManager();
         transactionManager.setSessionFactory(sessionFactory().getObject());
         return transactionManager;
