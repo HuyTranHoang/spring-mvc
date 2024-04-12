@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/master}">
 >
@@ -10,7 +11,12 @@
 <body>
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4" layout:fragment="page-heading">
-    <h1 class="h3 mb-0 text-primary">Customers list một hai ba bốn năm sáu bảy tám</h1>
+    <h1 class="h3 mb-0 text-primary">Customers list</h1>
+
+    <div class="divider"></div>
+
+    Logged user: <span sec:authentication="name"></span>
+    - Roles: <span sec:authentication="principal.authorities"></span>
 
     <div class="divider"></div>
 
@@ -69,16 +75,23 @@
                 <td th:text="${customer.firstName}"></td>
                 <td th:text="${customer.lastName}"></td>
                 <td th:text="${customer.email}"></td>
-                <td>
+                <td th:with="role = ${T(com.huy.crm.constant.RoleConstant)}">
                     <a th:href="@{view/{id}(id=${customer.id})}" class="text-decoration-none mr-3">
                         <i class="fa-solid fa-eye text-info"></i>
                     </a>
-                    <a th:href="@{edit/{id}(id=${customer.id})}" class="text-decoration-none mr-3">
+
+<!--                    <a th:href="@{edit/{id}(id=${customer.id})}" -->
+<!--                       class="text-decoration-none mr-3"-->
+<!--                       sec:authorize="hasRole(T(com.huy.crm.constant.RoleConstant).ADMIN)">-->
+<!--                        <i class="fa-solid fa-pen-to-square text-warning"></i>-->
+<!--                    </a>                    -->
+                    <a th:href="@{edit/{id}(id=${customer.id})}" class="text-decoration-none mr-3"
+                       sec:authorize="${hasRole(#vars.role.ADMIN)}">
                         <i class="fa-solid fa-pen-to-square text-warning"></i>
                     </a>
 
-                    <a th:onclick="|confirmDelete(${customer.id})|" class="text-decoration-none text-danger "
-                       style="cursor: pointer">
+                    <a href="#" th:onclick="|confirmDelete(${customer.id})|" class="text-decoration-none text-danger"
+                       sec:authorize="hasRole(T(com.huy.crm.constant.RoleConstant).ADMIN)">
                         <i class="fa-solid fa-trash"></i>
                     </a>
                 </td>
@@ -136,7 +149,7 @@
         </nav>
     </div>
 
-    <form id="deleteForm" method="post"></form>
+    <form id="deleteForm" method="post" th:action="@{/customer/delete}"></form>
 </main>
 
 <script layout:fragment="myScript" th:inline="javascript">

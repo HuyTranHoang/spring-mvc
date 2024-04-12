@@ -57,9 +57,6 @@ public class CustomerDAOImpl implements CustomerDAO {
                 case SortCustomerColumn.EMAIL_ASC:
                     query.orderBy(builder.desc(root.get("email")));
                     break;
-                case SortCustomerColumn.EMAIL_DESC:
-                    query.orderBy(builder.asc(root.get("email")));
-                    break;
                 default:
                     query.orderBy(builder.asc(root.get("id")));
                     break;
