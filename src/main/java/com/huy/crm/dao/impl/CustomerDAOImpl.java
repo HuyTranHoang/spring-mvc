@@ -51,10 +51,19 @@ public class CustomerDAOImpl implements CustomerDAO {
                 case SortCustomerColumn.FIRST_NAME_ASC:
                     query.orderBy(builder.asc(root.get("firstName")));
                     break;
+                case SortCustomerColumn.FIRST_NAME_DESC:
+                    query.orderBy(builder.desc(root.get("firstName")));
+                    break;
                 case SortCustomerColumn.LAST_NAME_ASC:
+                    query.orderBy(builder.asc(root.get("lastName")));
+                    break;
+                case SortCustomerColumn.LAST_NAME_DESC:
                     query.orderBy(builder.desc(root.get("lastName")));
                     break;
                 case SortCustomerColumn.EMAIL_ASC:
+                    query.orderBy(builder.asc(root.get("email")));
+                    break;
+                case SortCustomerColumn.EMAIL_DESC:
                     query.orderBy(builder.desc(root.get("email")));
                     break;
                 default:

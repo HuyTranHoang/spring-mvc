@@ -66,8 +66,6 @@ public class UserServiceImpl implements UserService {
 
         // Save the UserEntity first
         userDAO.saveUser(userEntity);
-
-        // Then save the UserRole
         userRoleDAO.saveUserRole(userRole);
 
         List<UserRole> userRoles = userRoleDAO.findUserRoleByUserId(userEntity.getId());
