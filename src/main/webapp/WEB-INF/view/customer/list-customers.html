@@ -15,7 +15,7 @@
 
     <div class="divider"></div>
 
-    Logged user: <span sec:authentication="name"></span>
+    Logged userEntity: <span sec:authentication="name"></span>
     - Roles: <span sec:authentication="principal.authorities"></span>
 
     <div class="divider"></div>
@@ -79,19 +79,13 @@
                     <a th:href="@{view/{id}(id=${customer.id})}" class="text-decoration-none mr-3">
                         <i class="fa-solid fa-eye text-info"></i>
                     </a>
-
-<!--                    <a th:href="@{edit/{id}(id=${customer.id})}" -->
-<!--                       class="text-decoration-none mr-3"-->
-<!--                       sec:authorize="hasRole(T(com.huy.crm.constant.RoleConstant).ADMIN)">-->
-<!--                        <i class="fa-solid fa-pen-to-square text-warning"></i>-->
-<!--                    </a>                    -->
                     <a th:href="@{edit/{id}(id=${customer.id})}" class="text-decoration-none mr-3"
                        sec:authorize="${hasRole(#vars.role.ADMIN)}">
                         <i class="fa-solid fa-pen-to-square text-warning"></i>
                     </a>
 
                     <a href="#" th:onclick="|confirmDelete(${customer.id})|" class="text-decoration-none text-danger"
-                       sec:authorize="hasRole(T(com.huy.crm.constant.RoleConstant).ADMIN)">
+                       sec:authorize="${hasRole(#vars.role.ADMIN)}">
                         <i class="fa-solid fa-trash"></i>
                     </a>
                 </td>

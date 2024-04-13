@@ -1,9 +1,7 @@
 package com.huy.crm.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.context.annotation.Bean;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,12 +10,14 @@ import java.io.Serializable;
 @Setter
 @Entity
 @Table(name = "users_roles")
+@AllArgsConstructor
+@NoArgsConstructor
 @IdClass(UserRoleId.class)
 public class UserRole {
     @Id
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private UserEntity userEntity;
 
     @Id
     @ManyToOne
@@ -27,8 +27,9 @@ public class UserRole {
 
 
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode
 class UserRoleId implements Serializable {
-    private int user;
-    private int role;
+    private UserEntity userEntity;
+    private Role role;
 }

@@ -1,5 +1,6 @@
 package com.huy.crm.config;
 
+import com.huy.crm.security.SecurityConfiguration;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
