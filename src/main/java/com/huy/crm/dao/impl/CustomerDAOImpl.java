@@ -49,22 +49,22 @@ public class CustomerDAOImpl implements CustomerDAO {
         if (sort != null && !sort.isEmpty()) {
             switch (sort) {
                 case SortCustomerColumn.FIRST_NAME_ASC:
-                    query.orderBy(builder.asc(root.get("firstName")));
+                    query.orderBy(builder.asc(root.get(SortCustomerColumn.FIRST_NAME)));
                     break;
                 case SortCustomerColumn.FIRST_NAME_DESC:
-                    query.orderBy(builder.desc(root.get("firstName")));
+                    query.orderBy(builder.desc(root.get(SortCustomerColumn.FIRST_NAME)));
                     break;
                 case SortCustomerColumn.LAST_NAME_ASC:
-                    query.orderBy(builder.asc(root.get("lastName")));
+                    query.orderBy(builder.asc(root.get(SortCustomerColumn.LAST_NAME)));
                     break;
                 case SortCustomerColumn.LAST_NAME_DESC:
-                    query.orderBy(builder.desc(root.get("lastName")));
+                    query.orderBy(builder.desc(root.get(SortCustomerColumn.LAST_NAME)));
                     break;
                 case SortCustomerColumn.EMAIL_ASC:
-                    query.orderBy(builder.asc(root.get("email")));
+                    query.orderBy(builder.asc(root.get(SortCustomerColumn.EMAIL)));
                     break;
                 case SortCustomerColumn.EMAIL_DESC:
-                    query.orderBy(builder.desc(root.get("email")));
+                    query.orderBy(builder.desc(root.get(SortCustomerColumn.EMAIL)));
                     break;
                 default:
                     query.orderBy(builder.asc(root.get("id")));

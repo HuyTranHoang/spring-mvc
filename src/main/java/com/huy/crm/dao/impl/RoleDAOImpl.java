@@ -5,8 +5,6 @@ import com.huy.crm.entity.Role;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
-
 @Repository
 public class RoleDAOImpl implements RoleDAO {
     private final SessionFactory sessionFactory;

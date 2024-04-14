@@ -1,7 +1,6 @@
 package com.huy.crm.entity;
 
 import lombok.*;
-import org.springframework.context.annotation.Bean;
 
 import javax.persistence.*;
 import java.io.Serializable;

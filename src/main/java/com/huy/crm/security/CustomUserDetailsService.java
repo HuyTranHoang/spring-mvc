@@ -26,14 +26,13 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (userEntity == null) {
             throw new UsernameNotFoundException("User not found");
         }
-        User authUser = new User(
+
+        return new User(
                 userEntity.getUsername(),
                 userEntity.getPassword(),
                 userEntity.getUserRoles().stream()
                         .map(userRole -> new SimpleGrantedAuthority(userRole.getRole().getName()))
                         .collect(Collectors.toList())
         );
-
-        return authUser;
     }
 }
