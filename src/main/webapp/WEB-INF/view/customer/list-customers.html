@@ -45,25 +45,25 @@
     <div>
         <table class="table table-striped">
             <thead class="table-primary">
-            <tr th:with="cusColmn = ${T(com.huy.crm.constant.SortCustomerColumn)}">
+            <tr th:with="cusColmn = ${T(com.huy.crm.constant.SortCustomerColumn)}, sort = ${param.sort != null ? param.sort : 'id'}">
                 <th scope="col">#</th>
                 <th scope="col" style="width: 25%" th:with="isFirstNameAsc = ${#strings.equals(param.sort, cusColmn.FIRST_NAME_ASC)}">
                     <a th:href="@{list(page=1,sort=${isFirstNameAsc ? cusColmn.FIRST_NAME_DESC : cusColmn.FIRST_NAME_ASC},search=${customerParams.search})}"
-                       th:class="${#strings.contains(param.sort, 'firstName')} ? 'text-primary' : 'text-gray-600'">
+                       th:class="${#strings.contains(sort, 'firstName')} ? 'text-primary' : 'text-gray-600'">
                         First
                         <i class="fa-solid" th:classappend="${isFirstNameAsc ? 'fa-arrow-up-wide-short' : 'fa-arrow-down-wide-short'}"></i>
                     </a>
                 </th>
-                <th scope="col" style="width: 25%" th:with="isLastNameAsc = ${#strings.equals(param.sort, cusColmn.LAST_NAME_ASC)}">
+                <th scope="col" style="width: 25%" th:with="isLastNameAsc = ${#strings.equals(sort, cusColmn.LAST_NAME_ASC)}">
                     <a th:href="@{list(page=1,sort=${isLastNameAsc ? cusColmn.LAST_NAME_DESC : cusColmn.LAST_NAME_ASC},search=${customerParams.search})}"
-                       th:class="${#strings.contains(param.sort, 'lastName')} ? 'text-primary' : 'text-gray-600'">
+                       th:class="${#strings.contains(sort, 'lastName')} ? 'text-primary' : 'text-gray-600'">
                         Last
                         <i class="fa-solid" th:classappend="${isLastNameAsc ? 'fa-arrow-up-wide-short' : 'fa-arrow-down-wide-short'}"></i>
                     </a>
                 </th>
-                <th scope="col" style="width: 25%" th:with="isEmailAsc = ${#strings.equals(param.sort, cusColmn.EMAIL_ASC)}">
+                <th scope="col" style="width: 25%" th:with="isEmailAsc = ${#strings.equals(sort, cusColmn.EMAIL_ASC)}">
                     <a th:href="@{list(page=1,sort=${isEmailAsc ? cusColmn.EMAIL_DESC : cusColmn.EMAIL_ASC},search=${customerParams.search})}"
-                       th:class="${#strings.contains(param.sort, 'email')} ? 'text-primary' : 'text-gray-600'">
+                       th:class="${#strings.contains(sort, 'email')} ? 'text-primary' : 'text-gray-600'">
                         Email
                         <i class="fa-solid" th:classappend="${isEmailAsc ? 'fa-arrow-up-wide-short' : 'fa-arrow-down-wide-short'}"></i>
                     </a>
