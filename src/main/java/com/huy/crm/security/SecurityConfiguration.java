@@ -54,15 +54,6 @@ public class SecurityConfiguration {
         return http.build();
     }
 
-
-//    @Bean
-//    public InMemoryUserDetailsManager userDetailsService() {
-//        User.UserBuilder users = User.withDefaultPasswordEncoder();
-//        UserDetails admin = users.username("admin").password("password").roles(RoleConstant.ADMIN, RoleConstant.USER).build();
-//        UserDetails user = users.username("user").password("password").roles(RoleConstant.USER).build();
-//        return new InMemoryUserDetailsManager(admin, user);
-//    }
-
     @Bean
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

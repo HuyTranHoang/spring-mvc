@@ -17,6 +17,6 @@ public class Role {
 
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "role")
-    private List<UserRole> userRoles;
+    @ManyToMany(mappedBy = "roles")
+    private List<UserEntity> users;
 }

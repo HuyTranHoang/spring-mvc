@@ -30,8 +30,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new User(
                 userEntity.getUsername(),
                 userEntity.getPassword(),
-                userEntity.getUserRoles().stream()
-                        .map(userRole -> new SimpleGrantedAuthority(userRole.getRole().getName()))
+                userEntity.getRoles()
+                        .stream()
+                        .map(role -> new SimpleGrantedAuthority(role.getName()))
                         .collect(Collectors.toList())
         );
     }
