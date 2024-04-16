@@ -43,14 +43,14 @@ public class AuthController {
         Optional<UserEntity> userOptional = userService.findByUserName(userEntity.getUsername());
         if (userOptional.isPresent()) {
             model.addAttribute("userEntity", userEntity);
-            model.addAttribute("error", "User already exists!");
+            result.rejectValue("username", "userEntity.username", "Username already exists!");
             return "auth/register";
         }
 
         userOptional = userService.findByEmail(userEntity.getEmail());
         if (userOptional.isPresent()) {
             model.addAttribute("userEntity", userEntity);
-            model.addAttribute("error", "Email already exists!");
+            result.rejectValue("email", "userEntity.email", "Email already exists!");
             return "auth/register";
         }
 

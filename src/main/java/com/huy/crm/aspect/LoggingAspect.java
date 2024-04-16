@@ -38,11 +38,11 @@ public class LoggingAspect {
         }
     }
 
-    @AfterReturning(pointcut = "forAppFlow()", returning = "result")
-    public void afterReturning(JoinPoint joinPoint, Object result) {
-        String method = joinPoint.getSignature().toShortString();
-        logger.info("=====>>> in @AfterReturning: from method: {}", method);
-
-        logger.info("=====>>> result: {}", result);
-    }
+//    @AfterReturning(pointcut = "forAppFlow()", returning = "result")
+//    public void afterReturning(JoinPoint joinPoint, Object result) {
+//        String method = joinPoint.getSignature().toShortString();
+//        logger.info("=====>>> in @AfterReturning: from method: {}", method);
+//
+//        logger.info("=====>>> result: {}", result);
+//    }
 }
