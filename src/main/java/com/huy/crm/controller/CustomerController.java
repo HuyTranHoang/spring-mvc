@@ -65,7 +65,7 @@ public class CustomerController {
     }
 
     @PostMapping("/delete/{id}")
-    public String deleteCustomer(@PathVariable int id, RedirectAttributes ra) {
+    public String deleteCustomer(@PathVariable long id, RedirectAttributes ra) {
         Optional<Customer> customerOptional = customerService.getCustomerById(id);
 
         if (!customerOptional.isPresent()) {

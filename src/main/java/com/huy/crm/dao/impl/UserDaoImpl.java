@@ -8,34 +8,34 @@ import org.springframework.stereotype.Repository;
 import javax.transaction.Transactional;
 
 @Repository
-public class UserDaoImpl implements UserDAO {
-
-    private final SessionFactory sessionFactory;
-
-    public UserDaoImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
+public class UserDaoImpl extends AbstractJpaDAO<UserEntity> implements UserDAO {
     @Override
     @Transactional
     public UserEntity findByUserName(String userName) {
-        return sessionFactory.getCurrentSession()
-                .createQuery("from UserEntity where username = :userName", UserEntity.class)
+        return entityManager.createQuery("from UserEntity where username = :userName", UserEntity.class)
                 .setParameter("userName", userName)
-                .uniqueResult();
+                .getResultList()
+                .stream()
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
     public UserEntity findByEmail(String email) {
-        return sessionFactory.getCurrentSession()
-                .createQuery("from UserEntity where email = :email", UserEntity.class)
+        return entityManager.createQuery("from UserEntity where email = :email", UserEntity.class)
                 .setParameter("email", email)
-                .uniqueResult();
+                .getResultList()
+                .stream()
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
     public void saveUser(UserEntity userEntity) {
-        sessionFactory.getCurrentSession()
-                .save(userEntity);
+        if (userEntity.getId() == 0) {
+            create(userEntity);
+        } else {
+            update(userEntity);
+        }
     }
 }

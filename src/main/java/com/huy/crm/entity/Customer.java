@@ -8,16 +8,17 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Entity
 @ToString
 @Table(name = "customers")
-public class Customer {
+public class Customer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @Column(name = "first_name", length = 50)
     @NotEmpty(message = "First name is required")

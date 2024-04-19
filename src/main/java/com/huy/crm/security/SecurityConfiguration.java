@@ -1,6 +1,6 @@
 package com.huy.crm.security;
 
-import com.huy.crm.constant.RoleConstant;
+
 import com.huy.crm.filter.EncodingFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -37,7 +37,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/resources/images/*", "/resources/css/*", "/resources/js/*", "/login", "/logout", "/register")
                 .permitAll()
                 .requestMatchers("/customer/new", "/customer/save", "/customer/edit/*", "/customer/delete/*")
-                .hasAnyRole(RoleConstant.ADMIN)
+                .hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()

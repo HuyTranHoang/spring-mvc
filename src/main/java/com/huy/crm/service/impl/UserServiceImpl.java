@@ -1,6 +1,6 @@
 package com.huy.crm.service.impl;
 
-import com.huy.crm.constant.RoleConstant;
+
 import com.huy.crm.dao.RoleDAO;
 import com.huy.crm.dao.UserDAO;
 import com.huy.crm.entity.Role;
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
 
         List<Role> roles = new ArrayList<>();
-        roles.add(roleDAO.findRoleByName(RoleConstant.USER));
+        roles.add(roleDAO.findRoleByName("ROLE_USER"));
 
         userEntity.setRoles(roles);
 

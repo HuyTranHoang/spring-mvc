@@ -33,7 +33,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
-    public Optional<Customer> getCustomerById(int id) {
+    public Optional<Customer> getCustomerById(long id) {
         Customer customer = customerDAO.getCustomerById(id);
 
         if (customer != null) {
@@ -63,7 +63,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
-    public void deleteCustomer(int id) {
+    public void deleteCustomer(long id) {
         customerDAO.deleteCustomer(id);
     }
 }

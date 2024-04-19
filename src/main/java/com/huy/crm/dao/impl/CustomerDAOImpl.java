@@ -5,7 +5,6 @@ import com.huy.crm.dao.CustomerDAO;
 import com.huy.crm.dto.CustomerParams;
 import com.huy.crm.entity.Customer;
 import com.huy.crm.entity.Customer_;
-import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -17,20 +16,13 @@ import java.util.List;
 
 
 @Repository
-public class CustomerDAOImpl implements CustomerDAO {
-
-    private final SessionFactory sessionFactory;
-
-    public CustomerDAOImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
+public class CustomerDAOImpl extends AbstractJpaDAO<Customer> implements CustomerDAO {
     @Override
     public List<Customer> getCustomers(CustomerParams customerParams) {
         String search = customerParams.getSearch();
         String sort = customerParams.getSort();
 
-        CriteriaBuilder builder = sessionFactory.getCriteriaBuilder();
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Customer> query = builder.createQuery(Customer.class);
         Root<Customer> root = query.from(Customer.class);
 
@@ -77,8 +69,7 @@ public class CustomerDAOImpl implements CustomerDAO {
         int pageSize = customerParams.getPageSize();
         int firstResult = (page - 1) * pageSize;
 
-        return sessionFactory.getCurrentSession()
-                .createQuery(query)
+        return entityManager.createQuery(query)
                 .setFirstResult(firstResult)
                 .setMaxResults(pageSize)
                 .getResultList();
@@ -88,7 +79,7 @@ public class CustomerDAOImpl implements CustomerDAO {
     public int getCustomersCount(CustomerParams customerParams) {
         String search = customerParams.getSearch();
 
-        CriteriaBuilder builder = sessionFactory.getCriteriaBuilder();
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> query = builder.createQuery(Long.class);
         Root<Customer> root = query.from(Customer.class);
 
@@ -109,38 +100,38 @@ public class CustomerDAOImpl implements CustomerDAO {
 
         query.where(predicates.toArray(new Predicate[0]));
 
-        return Math.toIntExact(sessionFactory.getCurrentSession()
-                .createQuery(query)
+        return Math.toIntExact(entityManager.createQuery(query)
                 .getSingleResult());
     }
 
 
     @Override
-    public Customer getCustomerById(int id) {
-        return sessionFactory.getCurrentSession()
-                .get(Customer.class, id);
+    public Customer getCustomerById(long id) {
+        return this.findOne(id);
     }
 
     @Override
     public Customer getCustomerByEmail(String email) {
-        return sessionFactory.getCurrentSession()
-                .createQuery("from Customer where email = :email", Customer.class)
+        return entityManager.createQuery("from Customer where email = :email", Customer.class)
                 .setParameter("email", email)
-                .uniqueResult();
+                .getResultList()
+                .stream()
+                .findFirst()
+                .orElse(null);
     }
 
 
     @Override
     public void saveCustomer(Customer customer) {
-        sessionFactory.getCurrentSession()
-                .saveOrUpdate(customer);
+        if (customer.getId() == 0) {
+            this.create(customer);
+        } else {
+            this.update(customer);
+        }
     }
 
     @Override
-    public void deleteCustomer(int customerId) {
-        sessionFactory.getCurrentSession()
-                .createQuery("delete from Customer where id = :customerId")
-                .setParameter("customerId", customerId)
-                .executeUpdate();
+    public void deleteCustomer(long customerId) {
+        this.deleteById(customerId);
     }
 }

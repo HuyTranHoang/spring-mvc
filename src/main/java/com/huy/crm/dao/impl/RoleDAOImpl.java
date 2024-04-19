@@ -6,24 +6,23 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class RoleDAOImpl implements RoleDAO {
-    private final SessionFactory sessionFactory;
-
-    public RoleDAOImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
+public class RoleDAOImpl extends AbstractJpaDAO<Role> implements RoleDAO {
     @Override
     public Role findRoleByName(String roleName) {
-        return sessionFactory.getCurrentSession()
-                .createQuery("from Role where name = :roleName", Role.class)
+        return entityManager.createQuery("from Role where name = :roleName", Role.class)
                 .setParameter("roleName", roleName)
-                .getSingleResult();
+                .getResultList()
+                .stream()
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
     public void saveRole(Role role) {
-        sessionFactory.getCurrentSession()
-                .save(role);
+        if (role.getId() == 0) {
+            create(role);
+        } else {
+            update(role);
+        }
     }
 }

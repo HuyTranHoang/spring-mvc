@@ -11,11 +11,11 @@ public interface CustomerService {
 
     int getCustomersCount(CustomerParams customerParams);
 
-    Optional<Customer> getCustomerById(int id);
+    Optional<Customer> getCustomerById(long id);
 
     Optional<Customer> getCustomerByEmail(String email);
 
     void saveCustomer(Customer customer);
 
-    void deleteCustomer(int id);
+    void deleteCustomer(long id);
 }

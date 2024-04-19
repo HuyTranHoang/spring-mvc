@@ -9,7 +9,7 @@ import javax.servlet.Filter;
 public class DispatcherServletInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[]{SpringConfiguration.class, HibernateConfiguration.class, SecurityConfiguration.class};
+        return new Class[]{SpringConfiguration.class, PersistenceJPAConfig.class, SecurityConfiguration.class};
     }
 
     @Override
