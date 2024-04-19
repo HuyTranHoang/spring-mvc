@@ -2,14 +2,18 @@ package com.huy.crm.dao.impl;
 
 import com.huy.crm.dao.RoleDAO;
 import com.huy.crm.entity.Role;
-import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class RoleDAOImpl extends AbstractJpaDAO<Role> implements RoleDAO {
+
+    public RoleDAOImpl() {
+        setClazz(Role.class);
+    }
+
     @Override
     public Role findRoleByName(String roleName) {
-        return entityManager.createQuery("from Role where name = :roleName", Role.class)
+        return entityManager.createQuery("select r from Role r where name = :roleName", Role.class)
                 .setParameter("roleName", roleName)
                 .getResultList()
                 .stream()

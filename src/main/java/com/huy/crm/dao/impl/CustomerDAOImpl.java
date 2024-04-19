@@ -17,6 +17,11 @@ import java.util.List;
 
 @Repository
 public class CustomerDAOImpl extends AbstractJpaDAO<Customer> implements CustomerDAO {
+
+    public CustomerDAOImpl() {
+        setClazz(Customer.class);
+    }
+
     @Override
     public List<Customer> getCustomers(CustomerParams customerParams) {
         String search = customerParams.getSearch();
@@ -112,7 +117,7 @@ public class CustomerDAOImpl extends AbstractJpaDAO<Customer> implements Custome
 
     @Override
     public Customer getCustomerByEmail(String email) {
-        return entityManager.createQuery("from Customer where email = :email", Customer.class)
+        return entityManager.createQuery("select c from Customer c where email = :email", Customer.class)
                 .setParameter("email", email)
                 .getResultList()
                 .stream()

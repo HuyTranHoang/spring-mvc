@@ -2,17 +2,21 @@ package com.huy.crm.dao.impl;
 
 import com.huy.crm.dao.UserDAO;
 import com.huy.crm.entity.UserEntity;
-import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 
 @Repository
 public class UserDaoImpl extends AbstractJpaDAO<UserEntity> implements UserDAO {
+
+    public UserDaoImpl() {
+        setClazz(UserEntity.class);
+    }
+
     @Override
     @Transactional
     public UserEntity findByUserName(String userName) {
-        return entityManager.createQuery("from UserEntity where username = :userName", UserEntity.class)
+        return entityManager.createQuery("select u from UserEntity u where username = :userName", UserEntity.class)
                 .setParameter("userName", userName)
                 .getResultList()
                 .stream()
@@ -22,7 +26,7 @@ public class UserDaoImpl extends AbstractJpaDAO<UserEntity> implements UserDAO {
 
     @Override
     public UserEntity findByEmail(String email) {
-        return entityManager.createQuery("from UserEntity where email = :email", UserEntity.class)
+        return entityManager.createQuery("select u from UserEntity u where email = :email", UserEntity.class)
                 .setParameter("email", email)
                 .getResultList()
                 .stream()

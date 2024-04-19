@@ -38,7 +38,6 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Obje
                     .disableDefaultConstraintViolation();
         }
 
-
         return valid;
     }
 

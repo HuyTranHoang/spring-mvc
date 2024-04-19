@@ -1,11 +1,8 @@
 package com.huy.crm.entity;
 
-import com.huy.crm.validation.ValidEmail;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.List;
 
