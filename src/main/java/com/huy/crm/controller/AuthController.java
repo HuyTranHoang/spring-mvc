@@ -51,7 +51,7 @@ public class AuthController {
         userOptional = userService.findByEmail(registerDTO.getEmail());
         if (userOptional.isPresent()) {
             model.addAttribute("registerDTO", registerDTO);
-            result.rejectValue("email", "userEntity.email", "Email already exists!");
+            result.rejectValue("email", "registerDTO.email", "Email already exists!");
             return "auth/register";
         }
 
