@@ -1,5 +1,6 @@
 package com.huy.crm.entity;
 
+import com.huy.crm.validation.ValidEmail;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,14 +20,10 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotEmpty(message = "Username is required")
     private String username;
 
-    @NotEmpty(message = "Password is required")
     private String password;
 
-    @NotEmpty(message = "Email is required")
-    @Email(message = "Email is invalid")
     private String email;
 
     private boolean enabled = true;

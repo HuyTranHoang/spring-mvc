@@ -4,6 +4,7 @@ import com.huy.crm.constant.SortCustomerColumn;
 import com.huy.crm.dao.CustomerDAO;
 import com.huy.crm.dto.CustomerParams;
 import com.huy.crm.entity.Customer;
+import com.huy.crm.entity.Customer_;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
@@ -36,10 +37,10 @@ public class CustomerDAOImpl implements CustomerDAO {
 
         if (search != null && !search.trim().isEmpty()) {
             Predicate firstNamePredicate = builder.like(
-                    builder.lower(root.get("firstName")), "%" + search.toLowerCase() + "%"
+                    builder.lower(root.get(Customer_.FIRST_NAME)), "%" + search.toLowerCase() + "%"
             );
             Predicate lastNamePredicate = builder.like(
-                    builder.lower(root.get("lastName")), "%" + search.toLowerCase() + "%"
+                    builder.lower(root.get(Customer_.LAST_NAME)), "%" + search.toLowerCase() + "%"
             );
 
             query.where(builder.or(firstNamePredicate, lastNamePredicate));
@@ -49,25 +50,25 @@ public class CustomerDAOImpl implements CustomerDAO {
         if (sort != null && !sort.isEmpty()) {
             switch (sort) {
                 case SortCustomerColumn.FIRST_NAME_ASC:
-                    query.orderBy(builder.asc(root.get(SortCustomerColumn.FIRST_NAME)));
+                    query.orderBy(builder.asc(root.get(Customer_.FIRST_NAME)));
                     break;
                 case SortCustomerColumn.FIRST_NAME_DESC:
-                    query.orderBy(builder.desc(root.get(SortCustomerColumn.FIRST_NAME)));
+                    query.orderBy(builder.desc(root.get(Customer_.FIRST_NAME)));
                     break;
                 case SortCustomerColumn.LAST_NAME_ASC:
-                    query.orderBy(builder.asc(root.get(SortCustomerColumn.LAST_NAME)));
+                    query.orderBy(builder.asc(root.get(Customer_.LAST_NAME)));
                     break;
                 case SortCustomerColumn.LAST_NAME_DESC:
-                    query.orderBy(builder.desc(root.get(SortCustomerColumn.LAST_NAME)));
+                    query.orderBy(builder.desc(root.get(Customer_.LAST_NAME)));
                     break;
                 case SortCustomerColumn.EMAIL_ASC:
-                    query.orderBy(builder.asc(root.get(SortCustomerColumn.EMAIL)));
+                    query.orderBy(builder.asc(root.get(Customer_.EMAIL)));
                     break;
                 case SortCustomerColumn.EMAIL_DESC:
-                    query.orderBy(builder.desc(root.get(SortCustomerColumn.EMAIL)));
+                    query.orderBy(builder.desc(root.get(Customer_.EMAIL)));
                     break;
                 default:
-                    query.orderBy(builder.asc(root.get("id")));
+                    query.orderBy(builder.asc(root.get(Customer_.ID)));
                     break;
             }
         }
@@ -97,10 +98,10 @@ public class CustomerDAOImpl implements CustomerDAO {
 
         if (search != null && !search.trim().isEmpty()) {
             Predicate firstNamePredicate = builder.like(
-                    builder.lower(root.get("firstName")), "%" + search.toLowerCase() + "%"
+                    builder.lower(root.get(Customer_.FIRST_NAME)), "%" + search.toLowerCase() + "%"
             );
             Predicate lastNamePredicate = builder.like(
-                    builder.lower(root.get("lastName")), "%" + search.toLowerCase() + "%"
+                    builder.lower(root.get(Customer_.LAST_NAME)), "%" + search.toLowerCase() + "%"
             );
 
             predicates.add(builder.or(firstNamePredicate, lastNamePredicate));
