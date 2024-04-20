@@ -3,6 +3,7 @@ package com.huy.crm.service.impl;
 
 import com.huy.crm.dao.RoleDAO;
 import com.huy.crm.dao.UserDAO;
+import com.huy.crm.dto.UserDto;
 import com.huy.crm.entity.Role;
 import com.huy.crm.entity.UserEntity;
 import com.huy.crm.service.UserService;
@@ -61,5 +62,25 @@ public class UserServiceImpl implements UserService {
         userEntity.setRoles(roles);
 
         userDAO.saveUser(userEntity);
+    }
+
+    @Override
+    public UserDto convertToDto(UserEntity userEntity) {
+        return UserDto.builder()
+                .id(userEntity.getId())
+                .username(userEntity.getUsername())
+                .email(userEntity.getEmail())
+                .build();
+    }
+
+    @Override
+    public UserEntity convertToEntity(UserDto userDto) {
+        return UserEntity.builder()
+                .id(userDto.getId())
+                .username(userDto.getUsername())
+                .email(userDto.getEmail())
+                .password(userDto.getPassword())
+                .enabled(true)
+                .build();
     }
 }

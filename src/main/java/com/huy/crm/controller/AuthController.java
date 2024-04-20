@@ -1,8 +1,10 @@
 package com.huy.crm.controller;
 
-import com.huy.crm.dto.RegisterDTO;
+import com.huy.crm.dto.UserDto;
 import com.huy.crm.entity.UserEntity;
+import com.huy.crm.security.SecurityUtil;
 import com.huy.crm.service.UserService;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,38 +31,33 @@ public class AuthController {
 
     @GetMapping("/register")
     public String register(Model model) {
-        RegisterDTO registerDTO = new RegisterDTO();
-        model.addAttribute("registerDTO", registerDTO);
+        UserDto userDTO = new UserDto();
+        model.addAttribute("registerDTO", userDTO);
         return "auth/register";
     }
 
     @PostMapping("/register")
-    public String saveUser(@Valid @ModelAttribute RegisterDTO registerDTO, BindingResult result, Model model) {
+    public String saveUser(@Valid @ModelAttribute UserDto userDTO, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("registerDTO", registerDTO);
+            model.addAttribute("registerDTO", userDTO);
             return "auth/register";
         }
 
-        Optional<UserEntity> userOptional = userService.findByUserName(registerDTO.getUsername());
+        Optional<UserEntity> userOptional = userService.findByUserName(userDTO.getUsername());
         if (userOptional.isPresent()) {
-            model.addAttribute("registerDTO", registerDTO);
+            model.addAttribute("registerDTO", userDTO);
             result.rejectValue("username", "registerDTO.username", "Username already exists!");
             return "auth/register";
         }
 
-        userOptional = userService.findByEmail(registerDTO.getEmail());
+        userOptional = userService.findByEmail(userDTO.getEmail());
         if (userOptional.isPresent()) {
-            model.addAttribute("registerDTO", registerDTO);
+            model.addAttribute("registerDTO", userDTO);
             result.rejectValue("email", "registerDTO.email", "Email already exists!");
             return "auth/register";
         }
 
-        UserEntity userEntity = UserEntity.builder()
-                .username(registerDTO.getUsername())
-                .password(registerDTO.getPassword())
-                .email(registerDTO.getEmail())
-                .enabled(true)
-                .build();
+        UserEntity userEntity = userService.convertToEntity(userDTO);
 
         userService.saveUser(userEntity);
         return "redirect:/login?success=true";
@@ -69,5 +66,19 @@ public class AuthController {
     @GetMapping("/access-denied")
     public String accessDenied() {
         return "auth/access-denied";
+    }
+
+    @GetMapping("/profile")
+    public String profile(Model model) {
+        String username = SecurityUtil.getSessionUser();
+        Optional<UserEntity> user = userService.findByUserName(username);
+
+        if (!user.isPresent()) {
+            return "redirect:/login";
+        }
+
+        UserDto userDto = userService.convertToDto(user.get());
+        model.addAttribute("userDto", userDto);
+        return "auth/profile";
     }
 }

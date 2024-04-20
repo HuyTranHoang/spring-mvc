@@ -2,8 +2,7 @@ package com.huy.crm.dto;
 
 import com.huy.crm.validation.FieldMatch;
 import com.huy.crm.validation.ValidEmail;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -12,7 +11,11 @@ import javax.validation.constraints.NotEmpty;
 })
 @Getter
 @Setter
-public class RegisterDTO {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserDto {
+    private long id;
 
     @NotEmpty(message = "Username is required")
     private String username;

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Profile</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="https://site-assets.fontawesome.com/releases/v6.3.0/css/all.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+    <!-- Custom styles for this template-->
+    <link th:href="@{/resources/css/sb-admin-2.min.css}" rel="stylesheet">
+
+</head>
+
+<body class="" th:style="|background:url(@{/resources/images/login-background.png});|">
+
+<div class="container">
+
+    <!-- Outer Row -->
+    <div class="row justify-content-center align-items-center vh-100">
+
+        <div class="col-xl-10 col-lg-12 col-md-9">
+
+            <div class="card o-hidden border-0 shadow-lg my-5">
+                <div class="card-body p-0">
+                    <div class="row">
+                        <div class="col-12 py-2 bg-white rounded border">
+
+                            <div class="mt-4 px-3">
+                                <h4 class="mb-0 text-primary">My profile</h4>
+                                <span>Manage profile information for account security</span>
+                            </div>
+
+                            <hr>
+
+                            <form th:object="${userDto}" th:action="@{/profile}" method="post" class="myForm">
+                                <div class="row">
+                                    <section class="col-8">
+                                        <div class="row p-3">
+                                            <label for="userName"
+                                                   class="col-sm-4 col-form-label text-right">Username</label>
+                                            <div class="col-sm-8" style="padding: 7px 12px">
+                                                <span th:text="${userDto.username}"></span>
+                                                <input type="hidden" class="form-control" id="userName"
+                                                       placeholder="username"
+                                                       th:field="*{username}">
+                                            </div>
+                                        </div>
+
+                                        <div class="row p-3">
+                                            <label for="userName"
+                                                   class="col-sm-4 col-form-label text-right">Email</label>
+                                            <div class="col-sm-8" style="padding: 7px 12px">
+                                                <span th:text="${userDto.email}"></span>
+                                                <input type="hidden" class="form-control" id="email"
+                                                       placeholder="email"
+                                                       th:field="*{email}">
+                                            </div>
+                                        </div>
+
+                                        <div class="row p-3">
+                                            <label for="userName" class="col-sm-4 col-form-label text-right">
+                                                Password <small class="text-danger">*</small>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="password" class="form-control" id="password"
+                                                       placeholder="password"
+                                                       th:field="*{password}">
+                                                <span th:if="${#fields.hasErrors('password')}"
+                                                      class="text-danger small"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="row p-3">
+                                            <label for="userName" class="col-sm-4 col-form-label text-right">
+                                                Confirm Password <small class="text-danger">*</small>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="password" class="form-control" id="confirmPassword"
+                                                       placeholder="confirm password"
+                                                       th:field="*{confirmPassword}">
+                                                <span th:if="${#fields.hasErrors('confirmPassword')}"
+                                                      class="text-danger small"></span>
+                                            </div>
+                                        </div>
+                                    </section>
+                                    <section class="col-4 d-flex flex-column align-items-center">
+                                        <img class="img-fluid w-50 mb-3"
+                                             src="https://upload.wikimedia.org/wikipedia/vi/e/e5/Gawr_Gura.png"
+                                             alt="avatar">
+
+                                        <div class="form-group mb-3">
+                                            <label for="avatar" class="btn btn-primary">Upload</label>
+                                            <input type="file" class="form-control-file" id="avatar" name="avatar"
+                                                   style="display: none">
+                                        </div>
+
+                                        <span class="small">Maximum file size is 1 MB</span>
+                                        <span class="small">Format: .JPEG, .PNG</span>
+                                    </section>
+                                </div>
+
+                                <hr>
+
+                                <div class="d-flex justify-content-end bg-white px-3">
+                                    <a th:href="@{/customer/list}" class="btn btn-danger mr-3">Back to admin page</a>
+                                    <button type="submit" class="btn btn-primary" style="width: 150px">Save</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script th:src="@{/resources/js/jquery.min.js}"></script>
+<script th:src="@{/resources/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/resources/js/jquery.easing.min.js}"></script>
+<script th:src="@{/resources/js/sb-admin-2.min.js}"></script>
+
+</body>
+
+</html>
