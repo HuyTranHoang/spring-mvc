@@ -48,10 +48,12 @@
         <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small" sec:authentication="name"></span>
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small"
+                      th:text="${#strings.capitalize(#authentication.getName())}"></span>
                 <img class="img-profile rounded-circle"
-                     src="https://ih1.redbubble.net/image.5072034569.7039/st,small,845x845-pad,1000x1000,f8f8f8.jpg">
+                     th:src="@{|/resources/images/user-photos/${#authentication.getPrincipal().getImageUrl()}|}"/>
             </a>
+
             <!-- Dropdown - User Information -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                  aria-labelledby="userDropdown">

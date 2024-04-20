@@ -60,7 +60,7 @@
                                             <label for="userName"
                                                    class="col-sm-4 col-form-label text-right">Username</label>
                                             <div class="col-sm-8" style="padding: 7px 12px">
-                                                <span th:text="${userDto.username}"></span>
+                                                <span th:text="${#strings.capitalize(userDto.username)}"></span>
                                                 <input type="hidden" class="form-control" id="userName"
                                                        placeholder="username"
                                                        th:field="*{username}">
