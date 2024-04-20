@@ -122,11 +122,12 @@ public class AuthController {
                     Files.createDirectories(uploadPath);
                 }
 
-                String filename = StringUtils.cleanPath(Objects.requireNonNull(image.getOriginalFilename()));
+                String filename =  System.currentTimeMillis() + "-" + image.getOriginalFilename();
+
                 Path filePath = uploadPath.resolve(filename);
                 image.transferTo(filePath.toFile());
 
-                userDto.setImageUrl(uploadDir + filename);
+                userDto.setImageUrl(filename);
             }
         } catch (IOException e) {
             model.addAttribute("userDto", userDto);
