@@ -2,7 +2,6 @@ package com.huy.crm.controller;
 
 import com.huy.crm.dto.CustomerDto;
 import com.huy.crm.dto.CustomerParams;
-import com.huy.crm.entity.Customer;
 import com.huy.crm.service.CustomerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
