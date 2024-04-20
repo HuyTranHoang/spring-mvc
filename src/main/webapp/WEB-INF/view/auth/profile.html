@@ -18,6 +18,15 @@
     <!-- Custom styles for this template-->
     <link th:href="@{/resources/css/sb-admin-2.min.css}" rel="stylesheet">
 
+    <style>
+        .divider {
+            width: 0;
+            border-right: 1px solid rgba(0, 0, 0, .1);
+            height: calc(18.375rem - 2rem);
+            margin: auto 0 0 1rem;
+        }
+    </style>
+
 </head>
 
 <body class="" th:style="|background:url(@{/resources/images/login-background.png});|">
@@ -41,9 +50,12 @@
 
                             <hr>
 
-                            <form th:object="${userDto}" th:action="@{/profile}" method="post" class="myForm">
+                            <form th:object="${userDto}" th:action="@{/profile/save}" method="post" class="myForm"
+                                  enctype="multipart/form-data">
                                 <div class="row">
                                     <section class="col-8">
+                                        <input type="hidden" th:field="*{id}">
+
                                         <div class="row p-3">
                                             <label for="userName"
                                                    class="col-sm-4 col-form-label text-right">Username</label>
@@ -75,6 +87,7 @@
                                                        placeholder="password"
                                                        th:field="*{password}">
                                                 <span th:if="${#fields.hasErrors('password')}"
+                                                      th:errors="*{password}"
                                                       class="text-danger small"></span>
                                             </div>
                                         </div>
@@ -88,19 +101,28 @@
                                                        placeholder="confirm password"
                                                        th:field="*{confirmPassword}">
                                                 <span th:if="${#fields.hasErrors('confirmPassword')}"
+                                                      th:errors="*{confirmPassword}"
                                                       class="text-danger small"></span>
                                             </div>
                                         </div>
                                     </section>
-                                    <section class="col-4 d-flex flex-column align-items-center">
+
+                                    <div class="divider"></div>
+
+
+                                    <section class="col d-flex flex-column align-items-center">
                                         <img class="img-fluid w-50 mb-3"
                                              src="https://upload.wikimedia.org/wikipedia/vi/e/e5/Gawr_Gura.png"
                                              alt="avatar">
 
                                         <div class="form-group mb-3">
-                                            <label for="avatar" class="btn btn-primary">Upload</label>
-                                            <input type="file" class="form-control-file" id="avatar" name="avatar"
-                                                   style="display: none">
+                                            <label for="image" class="btn btn-primary">Upload</label>
+                                            <input type="file" class="form-control-file" name="image" id="image"
+                                                   th:field="*{image}"
+                                                   accept="image/png, image/jpeg" style="display: none">
+                                            <span th:if="${#fields.hasErrors('image')}"
+                                                  th:errors="*{image}"
+                                                  class="text-danger small"></span>
                                         </div>
 
                                         <span class="small">Maximum file size is 1 MB</span>
@@ -131,6 +153,16 @@
 <script th:src="@{/resources/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/resources/js/jquery.easing.min.js}"></script>
 <script th:src="@{/resources/js/sb-admin-2.min.js}"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script th:if="${success}">
+    Swal.fire({
+        title: 'Success',
+        text: 'Update profile successfully',
+        icon: 'success'
+    });
+</script>
+
 
 </body>
 

@@ -4,6 +4,9 @@ import com.huy.crm.dao.RoleDAO;
 import com.huy.crm.entity.Role;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
+import java.util.List;
+
 @Repository
 public class RoleDAOImpl extends AbstractJpaDAO<Role> implements RoleDAO {
 
@@ -19,6 +22,13 @@ public class RoleDAOImpl extends AbstractJpaDAO<Role> implements RoleDAO {
                 .stream()
                 .findFirst()
                 .orElse(null);
+    }
+
+    @Override
+    public List<Role> findRoleByUserId(long userId) {
+        return entityManager.createQuery("select r from Role r join r.users u where u.id = :userId", Role.class)
+                .setParameter("userId", userId)
+                .getResultList();
     }
 
     @Override

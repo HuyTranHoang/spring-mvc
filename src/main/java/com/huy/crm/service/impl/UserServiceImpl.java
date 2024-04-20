@@ -56,10 +56,11 @@ public class UserServiceImpl implements UserService {
     public void saveUser(UserEntity userEntity) {
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
 
-        List<Role> roles = new ArrayList<>();
-        roles.add(roleDAO.findRoleByName("ROLE_USER"));
-
-        userEntity.setRoles(roles);
+        if (userEntity.getRoles() == null) {
+            List<Role> roles = new ArrayList<>();
+            roles.add(roleDAO.findRoleByName("ROLE_USER"));
+            userEntity.setRoles(roles);
+        }
 
         userDAO.saveUser(userEntity);
     }
@@ -70,16 +71,21 @@ public class UserServiceImpl implements UserService {
                 .id(userEntity.getId())
                 .username(userEntity.getUsername())
                 .email(userEntity.getEmail())
+                .imageUrl(userEntity.getImageUrl())
                 .build();
     }
 
     @Override
     public UserEntity convertToEntity(UserDto userDto) {
+        List<Role> roles = roleDAO.findRoleByUserId(userDto.getId());
+
         return UserEntity.builder()
                 .id(userDto.getId())
                 .username(userDto.getUsername())
                 .email(userDto.getEmail())
                 .password(userDto.getPassword())
+                .imageUrl(userDto.getImageUrl())
+                .roles(roles)
                 .enabled(true)
                 .build();
     }

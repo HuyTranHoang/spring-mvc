@@ -24,6 +24,8 @@ public class UserEntity implements Serializable {
 
     private String email;
 
+    private String imageUrl = "default.jpg";
+
     private boolean enabled = true;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
