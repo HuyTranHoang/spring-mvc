@@ -1,5 +1,6 @@
 package com.huy.crm.controller;
 
+import com.huy.crm.dto.CustomerDto;
 import com.huy.crm.dto.CustomerParams;
 import com.huy.crm.entity.Customer;
 import com.huy.crm.service.CustomerService;
@@ -31,7 +32,7 @@ public class CustomerController {
 
     @GetMapping("/list")
     public String listCustomers(@ModelAttribute CustomerParams customerParams, Model model) {
-        List<Customer> customers = customerService.getCustomers(customerParams);
+        List<CustomerDto> customers = customerService.getCustomers(customerParams);
         model.addAttribute("customerParams", customerParams);
         model.addAttribute("customers", customers);
 
@@ -45,28 +46,28 @@ public class CustomerController {
 
     @GetMapping("/new")
     public String showNewForm(Model model) {
-        Customer customer = new Customer();
-        model.addAttribute("customer", customer);
+        CustomerDto customerDto = new CustomerDto();
+        model.addAttribute("customerDto", customerDto);
         return "customer/customer-form";
     }
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable int id, RedirectAttributes ra, Model model) {
-        Optional<Customer> customerOptional = customerService.getCustomerById(id);
+        Optional<CustomerDto> customerOptional = customerService.getCustomerById(id);
 
         if (!customerOptional.isPresent()) {
             setNotification(ra, "Error", "Customer not found!", "error");
             return "redirect:/customer/list";
         }
 
-        Customer customer = customerOptional.get();
-        model.addAttribute("customer", customer);
+        CustomerDto customerDto = customerOptional.get();
+        model.addAttribute("customerDto", customerDto);
         return "customer/customer-form";
     }
 
     @PostMapping("/delete/{id}")
     public String deleteCustomer(@PathVariable long id, RedirectAttributes ra) {
-        Optional<Customer> customerOptional = customerService.getCustomerById(id);
+        Optional<CustomerDto> customerOptional = customerService.getCustomerById(id);
 
         if (!customerOptional.isPresent()) {
             setNotification(ra, "Error", "Customer not found!", "error");
@@ -80,30 +81,30 @@ public class CustomerController {
     }
 
     @PostMapping(value = "/save")
-    public String saveCustomer(@Valid @ModelAttribute("customer") Customer customer,
+    public String saveCustomer(@Valid @ModelAttribute("customer") CustomerDto customerDto,
                                BindingResult result,
                                RedirectAttributes ra,
                                Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("customer", customer);
+            model.addAttribute("customerDto", customerDto);
             return "customer/customer-form";
         }
 
-        Optional<Customer> customerOptional = customerService.getCustomerByEmail(customer.getEmail());
+        Optional<CustomerDto> customerOptional = customerService.getCustomerByEmail(customerDto.getEmail());
 
-        if (customerOptional.isPresent() && customer.getId() != customerOptional.get().getId()) {
-            model.addAttribute("customer", customer);
+        if (customerOptional.isPresent() && customerDto.getId() != customerOptional.get().getId()) {
+            model.addAttribute("customer", customerDto);
             result.rejectValue("email", "customer.email", "Email is already in use!");
             return "customer/customer-form";
         }
 
-        if (customer.getId() != 0) {
+        if (customerDto.getId() != 0) {
             setNotification(ra, "Success", "Customer updated successfully!", "success");
         } else {
             setNotification(ra, "Success", "Customer added successfully!", "success");
         }
 
-        customerService.saveCustomer(customer);
+        customerService.saveCustomer(customerDto);
 
         return "redirect:/customer/list";
     }
