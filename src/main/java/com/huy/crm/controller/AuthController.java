@@ -65,9 +65,7 @@ public class AuthController {
             return "auth/register";
         }
 
-        UserEntity userEntity = userService.convertToEntity(userDTO);
-
-        userService.saveUser(userEntity);
+        userService.saveUser(userDTO);
         return "redirect:/login?success=true";
     }
 
@@ -133,9 +131,7 @@ public class AuthController {
             return "auth/profile";
         }
 
-        UserEntity userEntity = userService.convertToEntity(userDto);
-
-        userService.saveUser(userEntity);
+        userService.saveUser(userDto);
 
         ra.addFlashAttribute("success", true);
 

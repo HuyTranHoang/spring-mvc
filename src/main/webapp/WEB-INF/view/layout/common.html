@@ -51,7 +51,8 @@
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"
                       th:text="${#strings.capitalize(#authentication.getName())}"></span>
                 <img class="img-profile rounded-circle"
-                     th:src="@{|/resources/images/user-photos/${#authentication.getPrincipal().getImageUrl()}|}" alt="avatar"/>
+                     th:src="@{|/resources/images/user-photos/${#authentication.getPrincipal().getImageUrl()}|}"
+                     alt="avatar"/>
             </a>
 
             <!-- Dropdown - User Information -->
@@ -132,15 +133,15 @@
     <!-- Nav Item - User Collapse Menu -->
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsers">
-            <i class="fas fa-fw fa-userEntity"></i>
+            <i class="fas fa-fw fa-user"></i>
             <span>Users</span>
             <i class="fa-solid fa-chevron-right my-icon"></i>
         </a>
         <div id="collapseUsers" class="collapse" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">User management:</h6>
-                <a class="collapse-item" href="#">List</a>
-                <a class="collapse-item" href="#">Create</a>
+                <a class="collapse-item" th:href="@{/user/list}">List</a>
+                <a class="collapse-item" th:href="@{/user/new}">Create</a>
             </div>
         </div>
     </li>

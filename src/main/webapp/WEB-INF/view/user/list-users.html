@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/master}">
+>
+<head>
+    <meta charset="UTF-8">
+    <title>User list </title>
+</head>
+<body>
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4" layout:fragment="page-heading">
+    <h1 class="h3 mb-0 text-primary">User list</h1>
+
+    <div class="divider"></div>
+
+        <form class="d-flex form-inline mr-auto my-2 my-md-0 mw-100 navbar-search" id="searchForm">
+            <div class="input-group mr-3">
+                <input type="text" name="search" class="form-control small" placeholder="Search for...">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fas fa-search fa-sm"></i>
+                    </button>
+                </div>
+            </div>
+
+            <input type="hidden">
+
+            <a th:if="${!#strings.isEmpty(param.search) and #strings.length(param.search) > 0}" th:href="@{/user/list}"
+               class="btn btn-warning">Clear</a>
+        </form>
+
+    <a th:href="@{new}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+        <i class="fa-solid fa-plus"></i> Create new user</a>
+</div>
+
+<main class="col-12" layout:fragment="content">
+    <div>
+        <table class="table table-striped">
+            <thead class="table-primary">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col" style="width: 25%">
+                    Username
+                </th>
+                <th scope="col" style="width: 25%">
+                    Email
+                </th>
+                <th scope="col" style="width: 25%">
+                    Roles
+                </th>
+                <th scope="col" style="width: 15%">
+                    Enabled
+                </th>
+                <th scope="col" style="width: 10%">Actions</th>
+            </tr>
+            </thead>
+            <tbody class="table-light">
+            <tr th:each="user, iterStat: ${users}">
+                <th scope="row" th:text="${iterStat.index + 1}"></th>
+                <td th:text="${user.username}"></td>
+                <td th:text="${user.email}"></td>
+                <td>
+                    <span th:each="role: ${user.roles}">
+                        <span class="badge badge-success" th:text="${role}"></span>
+                        <span th:if="${!role.equals(user.roles[user.roles.size() - 1])}">, </span>
+                    </span>
+                </td>
+                <td>
+                    <span th:if="${user.enabled}">
+                        <i class="fa-solid fa-circle-check mr-1" style="color: #63E6BE;"></i>
+                        <small>Yes</small>
+                    </span>
+                    <span th:unless="${user.enabled}">
+                        <i class="fa-solid fa-circle-x mr-1" style="color: #e66565;"></i>
+                        <small>No</small>
+                    </span>
+
+                </td>
+                <td>
+                    <a th:href="@{view/{id}(id=${user.id})}" class="text-decoration-none mr-3">
+                        <i class="fa-solid fa-eye text-info"></i>
+                    </a>
+                    <a th:href="@{edit/{id}(id=${user.id})}" class="text-decoration-none mr-3"
+                       sec:authorize="${hasRole('ROLE_ADMIN')}">
+                        <i class="fa-solid fa-pen-to-square text-warning"></i>
+                    </a>
+
+                    <a href="#" th:onclick="|confirmDelete(${user.id})|" class="text-decoration-none text-danger"
+                       sec:authorize="${hasRole('ROLE_ADMIN')}">
+                        <i class="fa-solid fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+
+            <tr th:if="${users.isEmpty()}">
+                <td colspan="5" class="text-center">No data</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <form id="deleteForm" method="post" th:action="@{/user/delete}"></form>
+</main>
+
+<script layout:fragment="myScript" th:inline="javascript">
+    function confirmDelete(id) {
+        /* global Swal*/
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const url = /*[[@{/user/delete/}]]*/ '';
+                const deleteForm = document.getElementById('deleteForm');
+                deleteForm.action = url + id;
+                deleteForm.submit();
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

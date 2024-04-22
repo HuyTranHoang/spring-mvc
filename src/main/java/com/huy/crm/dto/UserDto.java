@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 @FieldMatch.List({
         @FieldMatch(first = "password", second = "confirmPassword", message = "The password fields must match")
@@ -30,6 +31,10 @@ public class UserDto {
     @NotEmpty(message = "Email is required")
     @ValidEmail
     private String email;
+
+    private boolean enabled;
+
+    private List<String> roles;
 
     private MultipartFile image;
 

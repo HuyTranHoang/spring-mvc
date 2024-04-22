@@ -2,6 +2,7 @@ package com.huy.crm.security;
 
 import com.huy.crm.dao.UserDAO;
 import com.huy.crm.entity.UserEntity;
+import com.huy.crm.service.UserService;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -11,20 +12,27 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
-    private final UserDAO userDAO;
+    private final UserService userService;
 
-    public CustomUserDetailsService(UserDAO userDAO) {
-        this.userDAO = userDAO;
+    public CustomUserDetailsService(UserService userService) {
+        this.userService = userService;
     }
 
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
 
-        UserEntity userEntity = userDAO.findByUserName(username);
+        Optional<UserEntity> userEntityOptional = userService.findByUserName(username);
+
+        if (!userEntityOptional.isPresent()) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        UserEntity userEntity = userEntityOptional.get();
+
         return buildUserForAuthentication(userEntity, userEntity.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList()));

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/master}">
+<head>
+    <title>Add user</title>
+</head>
+<body>
+
+<!--/*@thymesVar id="customer" type="com.huy.crm.entity.Customer"*/-->
+<!--<div class="d-sm-flex align-items-center justify-content-between mb-4" layout:fragment="page-heading">-->
+<!--    <h1 class="h3 mb-0 text-primary" th:text="${customer.id == 0 ? 'Create new customer' : 'Update customer'}"></h1>-->
+
+<!--    <a th:href="@{/customer/list}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">-->
+<!--        <i class="fa-solid fa-plus"></i> Back to list</a>-->
+<!--</div>-->
+
+<main layout:fragment="content" class="col-md-6">
+
+    <div class="px-3 pb-3 bg-white rounded border">
+
+        <div class="d-flex justify-content-between mt-4">
+            <h3 class="h3 mb-0 text-primary"
+                th:text="${userDto.id == 0 ? 'Add new user' : 'Update user'}"></h3>
+
+            <a th:href="@{/user/list}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                <i class="fa-solid fa-arrow-left mr-2"></i> Back to list
+            </a>
+        </div>
+
+        <hr>
+
+        <form th:action="@{/user/save}" th:object="${userDto}" method="post" class="myForm needs-validation">
+
+            <input type="hidden" th:field="*{id}">
+
+            <div class="row p-3">
+                <label for="username" class="col-sm-3 col-form-label text-right">
+                    Username <small class="text-danger">*</small>
+                </label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="username" placeholder="username"
+                           th:field="*{username}">
+                    <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"
+                          class="text-danger small"></span>
+                </div>
+            </div>
+
+            <div class="row p-3">
+                <label for="email" class="col-sm-3 col-form-label text-right">
+                    Email <small class="text-danger">*</small>
+                </label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="email" placeholder="email"
+                           th:field="*{email}">
+                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <div class="row p-3">
+                <label for="password" class="col-sm-3 col-form-label text-right">
+                    Password <small class="text-danger">*</small>
+                </label>
+                <div class="col-sm-9">
+                    <input type="password" class="form-control" id="password" placeholder="password"
+                           th:field="*{password}">
+                    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+                          class="text-danger small"></span>
+                </div>
+            </div>
+
+            <div class="row p-3">
+                <label for="confirmPassword" class="col-sm-3 col-form-label text-right">
+                    Confirm password <small class="text-danger">*</small>
+                </label>
+                <div class="col-sm-9">
+                    <input type="password" class="form-control" id="confirmPassword" placeholder="confirm password"
+                           th:field="*{confirmPassword}">
+                    <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"
+                          class="text-danger small"></span>
+                </div>
+            </div>
+
+            <div class="row p-3">
+                <label class="col-sm-3 col-form-label text-right">
+                    Roles <small class="text-danger">*</small>
+                </label>
+                <div class="col-sm-9">
+                    <div th:each="role : ${roles}" class="form-check">
+                        <input th:field="*{roles}" th:value="${role.name}" th:id="${role.id}" class="form-check-input"
+                               type="checkbox">
+                        <label th:text="${role.name}" th:for="${role.id}" class="form-check-label"></label>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="d-flex justify-content-end bg-white">
+                <button type="submit" class="btn btn-primary" style="width: 150px">Save</button>
+            </div>
+        </form>
+    </div>
+
+</main>
+
+<script layout:fragment="myScript">
+    $(function () {
+        $('.myForm').validate({
+            rules: {
+                username: {
+                    required: true,
+                    minlength: 2
+                },
+                email: {
+                    required: true,
+                    email: true
+                },
+                password: {
+                    required: true,
+                    minlength: 3
+                },
+                confirmPassword: {
+                    required: true,
+                    minlength: 3
+                },
+            },
+            messages: {
+                username: {
+                    required: 'First name is required.',
+                    minlength: 'First name must be at least 3 characters.'
+                },
+                email: {
+                    required: 'Email is required.',
+                    email: 'Email is invalid.'
+                },
+                password: {
+                    required: 'Password is required.',
+                    minlength: 'Password must be at least 4 characters.'
+                },
+                confirmPassword: {
+                    required: 'Confirm password is required.',
+                    minlength: 'Confirm password must be at least 4 characters.'
+                },
+            },
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+                error.addClass('text-danger');
+                error.insertAfter(element);
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            },
+            submitHandler: function (form) {
+                form.submit();
+            }
+        });
+    })
+</script>
+
+</body>
+</html>

@@ -14,6 +14,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -25,6 +26,15 @@ public class UserServiceImpl implements UserService {
         this.userDAO = userDAO;
         this.roleDAO = roleDAO;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    public List<UserDto> getAllUsers() {
+        List<UserEntity> userEntities = userDAO.getAllUsers();
+
+        return userEntities.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -53,7 +63,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void saveUser(UserEntity userEntity) {
+    public void saveUser(UserDto userDto) {
+        UserEntity userEntity = convertToEntity(userDto);
+
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
 
         if (userEntity.getRoles() == null) {
@@ -72,12 +84,28 @@ public class UserServiceImpl implements UserService {
                 .username(userEntity.getUsername())
                 .email(userEntity.getEmail())
                 .imageUrl(userEntity.getImageUrl())
+                .roles(userEntity.getRoles().stream()
+                        .map(Role::getName)
+                        .collect(Collectors.toList()))
+                .enabled(userEntity.isEnabled())
                 .build();
     }
 
     @Override
     public UserEntity convertToEntity(UserDto userDto) {
-        List<Role> roles = roleDAO.findRoleByUserId(userDto.getId());
+
+        List<Role> roles;
+
+        if (!userDto.getRoles().isEmpty()) {
+            roles = userDto.getRoles().stream()
+                    .map(roleDAO::findRoleByName)
+                    .collect(Collectors.toList());
+        } else {
+            roles = roleDAO.findRoleByUserId(userDto.getId());
+            if (roles.isEmpty()) {
+                roles.add(roleDAO.findRoleByName("ROLE_USER"));
+            }
+        }
 
         return UserEntity.builder()
                 .id(userDto.getId())

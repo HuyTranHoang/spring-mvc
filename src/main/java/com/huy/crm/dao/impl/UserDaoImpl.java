@@ -5,6 +5,7 @@ import com.huy.crm.entity.UserEntity;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Repository
 public class UserDaoImpl extends AbstractJpaDAO<UserEntity> implements UserDAO {
@@ -15,6 +16,11 @@ public class UserDaoImpl extends AbstractJpaDAO<UserEntity> implements UserDAO {
 
     @Override
     @Transactional
+    public List<UserEntity> getAllUsers() {
+        return this.findAll();
+    }
+
+    @Override
     public UserEntity findByUserName(String userName) {
         return entityManager.createQuery("select u from UserEntity u where username = :userName", UserEntity.class)
                 .setParameter("userName", userName)
