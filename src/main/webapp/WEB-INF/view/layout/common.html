@@ -51,7 +51,7 @@
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"
                       th:text="${#strings.capitalize(#authentication.getName())}"></span>
                 <img class="img-profile rounded-circle"
-                     th:src="@{|/resources/images/user-photos/${#authentication.getPrincipal().getImageUrl()}|}"/>
+                     th:src="@{|/resources/images/user-photos/${#authentication.getPrincipal().getImageUrl()}|}" alt="avatar"/>
             </a>
 
             <!-- Dropdown - User Information -->

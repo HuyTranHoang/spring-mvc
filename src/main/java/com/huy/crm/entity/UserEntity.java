@@ -9,10 +9,10 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-@Table(name = "users")
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "users")
+@Entity
 public class UserEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

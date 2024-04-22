@@ -1,10 +1,14 @@
 package com.huy.crm.security;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
 import java.util.Collection;
 
+@Setter
+@Getter
 public class CurrentUser extends User {
 
     public CurrentUser(String username, String password, boolean enabled, boolean accountNonExpired,
@@ -15,11 +19,4 @@ public class CurrentUser extends User {
 
     private String imageUrl;
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
 }

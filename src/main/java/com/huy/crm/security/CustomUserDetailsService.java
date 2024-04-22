@@ -1,7 +1,6 @@
 package com.huy.crm.security;
 
 import com.huy.crm.dao.UserDAO;
-import com.huy.crm.entity.Role;
 import com.huy.crm.entity.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,8 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .collect(Collectors.toList()));
     }
 
-    private User buildUserForAuthentication(UserEntity user,
-                                            List<GrantedAuthority> authorities) {
+    private User buildUserForAuthentication(UserEntity user, List<GrantedAuthority> authorities) {
         String username = user.getUsername();
         String password = user.getPassword();
         boolean enabled = true;

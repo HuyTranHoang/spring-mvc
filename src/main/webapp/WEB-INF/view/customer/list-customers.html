@@ -49,7 +49,7 @@
             <tr th:with="cusColmn = ${T(com.huy.crm.constant.SortCustomerColumn)}, sort = ${param.sort != null ? param.sort : 'id'}">
                 <th scope="col">#</th>
                 <th scope="col" style="width: 25%"
-                    th:with="isFirstNameAsc = ${#strings.equals(param.sort, cusColmn.FIRST_NAME_ASC)}">
+                    th:with="isFirstNameAsc = ${#strings.equals(sort, cusColmn.FIRST_NAME_ASC)}">
                     <a th:href="@{list(page=1,sort=${isFirstNameAsc ? cusColmn.FIRST_NAME_DESC : cusColmn.FIRST_NAME_ASC},search=${customerParams.search})}"
                        th:class="${#strings.contains(sort, 'firstName')} ? 'text-primary' : 'text-gray-600'">
                         First
