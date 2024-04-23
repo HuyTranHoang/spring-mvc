@@ -1,12 +1,10 @@
 package com.huy.crm.dao.impl;
 
 import com.huy.crm.dao.RoleDAO;
-
 import com.huy.crm.entity.Role;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collections;
 import java.util.List;
 
 @Repository
