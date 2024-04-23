@@ -1,47 +1,48 @@
 package com.huy.crm.dao.impl;
 
 import com.huy.crm.dao.RoleDAO;
+
 import com.huy.crm.entity.Role;
+import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collections;
 import java.util.List;
 
 @Repository
-public class RoleDAOImpl extends AbstractJpaDAO<Role> implements RoleDAO {
+public class RoleDAOImpl implements RoleDAO {
 
-    public RoleDAOImpl() {
-        setClazz(Role.class);
+    private final SessionFactory sessionFactory;
+
+    public RoleDAOImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
     public List<Role> getAllRoles() {
-        return findAll();
+        return sessionFactory.getCurrentSession()
+                .createQuery("from Role", Role.class)
+                .getResultList();
     }
 
     @Override
     public Role findRoleByName(String roleName) {
-        return entityManager.createQuery("select r from Role r where name = :roleName", Role.class)
+        return sessionFactory.getCurrentSession()
+                .createQuery("from Role where name = :roleName", Role.class)
                 .setParameter("roleName", roleName)
-                .getResultList()
-                .stream()
-                .findFirst()
-                .orElse(null);
+                .uniqueResult();
     }
 
     @Override
     public List<Role> findRoleByUserId(long userId) {
-        return entityManager.createQuery("select r from Role r join r.users u where u.id = :userId", Role.class)
+        return sessionFactory.getCurrentSession()
+                .createQuery("select r from Role r join r.users u where u.id = :userId", Role.class)
                 .setParameter("userId", userId)
                 .getResultList();
     }
 
     @Override
     public void saveRole(Role role) {
-        if (role.getId() == 0) {
-            create(role);
-        } else {
-            update(role);
-        }
+        sessionFactory.getCurrentSession().saveOrUpdate(role);
     }
 }

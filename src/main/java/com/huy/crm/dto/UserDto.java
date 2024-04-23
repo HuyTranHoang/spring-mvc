@@ -1,6 +1,7 @@
 package com.huy.crm.dto;
 
 import com.huy.crm.validation.FieldMatch;
+import com.huy.crm.validation.OnUpdate;
 import com.huy.crm.validation.ValidEmail;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,7 +20,7 @@ import java.util.List;
 public class UserDto {
     private long id;
 
-    @NotEmpty(message = "Username is required")
+    @NotEmpty(message = "Username is required", groups = {OnUpdate.class})
     private String username;
 
     @NotEmpty(message = "Password is required")
@@ -28,11 +29,11 @@ public class UserDto {
     @NotEmpty(message = "Confirm password is required")
     private String confirmPassword;
 
-    @NotEmpty(message = "Email is required")
-    @ValidEmail
+    @NotEmpty(message = "Email is required", groups = {OnUpdate.class})
+    @ValidEmail(groups = {OnUpdate.class})
     private String email;
 
-    private boolean enabled;
+    private boolean enabled = true;
 
     private List<String> roles;
 

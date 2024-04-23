@@ -1,15 +1,19 @@
 package com.huy.crm.config;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
 import java.util.Properties;
 
-
+@Configuration
+@EnableTransactionManagement
 public class HibernateConfiguration {
     private Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
@@ -18,7 +22,7 @@ public class HibernateConfiguration {
         return hibernateProperties;
     }
 
-
+    @Bean
     public DataSource dataSource() throws PropertyVetoException {
         ComboPooledDataSource dataSource = new ComboPooledDataSource();
         dataSource.setDriverClass("com.mysql.cj.jdbc.Driver");
@@ -28,6 +32,7 @@ public class HibernateConfiguration {
         return dataSource;
     }
 
+    @Bean
     public LocalSessionFactoryBean sessionFactory() throws PropertyVetoException {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
@@ -36,6 +41,7 @@ public class HibernateConfiguration {
         return sessionFactory;
     }
 
+    @Bean
     public PlatformTransactionManager transactionManager() throws PropertyVetoException {
         HibernateTransactionManager transactionManager = new HibernateTransactionManager();
         transactionManager.setSessionFactory(sessionFactory().getObject());

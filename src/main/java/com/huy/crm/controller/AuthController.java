@@ -1,7 +1,6 @@
 package com.huy.crm.controller;
 
 import com.huy.crm.dto.UserDto;
-import com.huy.crm.entity.UserEntity;
 import com.huy.crm.security.SecurityUtil;
 import com.huy.crm.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -51,15 +50,15 @@ public class AuthController {
             return "auth/register";
         }
 
-        Optional<UserEntity> userOptional = userService.findByUserName(userDTO.getUsername());
-        if (userOptional.isPresent()) {
+        Optional<UserDto> userDtoOptional = userService.findByUserName(userDTO.getUsername());
+        if (userDtoOptional.isPresent()) {
             model.addAttribute("userDTO", userDTO);
             result.rejectValue("username", "userDTO.username", "Username already exists!");
             return "auth/register";
         }
 
-        userOptional = userService.findByEmail(userDTO.getEmail());
-        if (userOptional.isPresent()) {
+        userDtoOptional = userService.findByEmail(userDTO.getEmail());
+        if (userDtoOptional.isPresent()) {
             model.addAttribute("userDTO", userDTO);
             result.rejectValue("email", "userDTO.email", "Email already exists!");
             return "auth/register";
@@ -77,14 +76,13 @@ public class AuthController {
     @GetMapping("/profile")
     public String profile(Model model) {
         String username = SecurityUtil.getSessionUser();
-        Optional<UserEntity> user = userService.findByUserName(username);
+        Optional<UserDto> userDto = userService.findByUserName(username);
 
-        if (!user.isPresent()) {
+        if (!userDto.isPresent()) {
             return "redirect:/login";
         }
 
-        UserDto userDto = userService.convertToDto(user.get());
-        model.addAttribute("userDto", userDto);
+        model.addAttribute("userDto", userDto.get());
         return "auth/profile";
     }
 
@@ -99,9 +97,9 @@ public class AuthController {
         }
 
         String username = SecurityUtil.getSessionUser();
-        Optional<UserEntity> user = userService.findByUserName(username);
+        Optional<UserDto> userDtoOptional = userService.findByUserName(username);
 
-        if (!user.isPresent()) {
+        if (!userDtoOptional.isPresent()) {
             return "redirect:/login";
         }
 

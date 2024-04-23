@@ -5,6 +5,7 @@ import com.huy.crm.dao.CustomerDAO;
 import com.huy.crm.dto.CustomerParams;
 import com.huy.crm.entity.Customer;
 import com.huy.crm.entity.Customer_;
+import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -16,10 +17,12 @@ import java.util.List;
 
 
 @Repository
-public class CustomerDAOImpl extends AbstractJpaDAO<Customer> implements CustomerDAO {
+public class CustomerDAOImpl implements CustomerDAO {
 
-    public CustomerDAOImpl() {
-        setClazz(Customer.class);
+    private final SessionFactory sessionFactory;
+
+    public CustomerDAOImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
@@ -27,7 +30,7 @@ public class CustomerDAOImpl extends AbstractJpaDAO<Customer> implements Custome
         String search = customerParams.getSearch();
         String sort = customerParams.getSort();
 
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaBuilder builder = sessionFactory.getCriteriaBuilder();
         CriteriaQuery<Customer> query = builder.createQuery(Customer.class);
         Root<Customer> root = query.from(Customer.class);
 
@@ -74,7 +77,8 @@ public class CustomerDAOImpl extends AbstractJpaDAO<Customer> implements Custome
         int pageSize = customerParams.getPageSize();
         int firstResult = (page - 1) * pageSize;
 
-        return entityManager.createQuery(query)
+        return sessionFactory.getCurrentSession()
+                .createQuery(query)
                 .setFirstResult(firstResult)
                 .setMaxResults(pageSize)
                 .getResultList();
@@ -84,7 +88,7 @@ public class CustomerDAOImpl extends AbstractJpaDAO<Customer> implements Custome
     public int getCustomersCount(CustomerParams customerParams) {
         String search = customerParams.getSearch();
 
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaBuilder builder = sessionFactory.getCriteriaBuilder();
         CriteriaQuery<Long> query = builder.createQuery(Long.class);
         Root<Customer> root = query.from(Customer.class);
 
@@ -105,38 +109,32 @@ public class CustomerDAOImpl extends AbstractJpaDAO<Customer> implements Custome
 
         query.where(predicates.toArray(new Predicate[0]));
 
-        return Math.toIntExact(entityManager.createQuery(query)
-                .getSingleResult());
+        return Math.toIntExact(sessionFactory.getCurrentSession().createQuery(query).getSingleResult());
     }
 
 
     @Override
     public Customer getCustomerById(long id) {
-        return this.findOne(id);
+        return sessionFactory.getCurrentSession().get(Customer.class, id);
     }
 
     @Override
     public Customer getCustomerByEmail(String email) {
-        return entityManager.createQuery("select c from Customer c where email = :email", Customer.class)
+        return sessionFactory.getCurrentSession()
+                .createQuery("select c from Customer c where email = :email", Customer.class)
                 .setParameter("email", email)
-                .getResultList()
-                .stream()
-                .findFirst()
-                .orElse(null);
+                .getSingleResult();
     }
 
 
     @Override
     public void saveCustomer(Customer customer) {
-        if (customer.getId() == 0) {
-            this.create(customer);
-        } else {
-            this.update(customer);
-        }
+        sessionFactory.getCurrentSession().saveOrUpdate(customer);
     }
 
     @Override
     public void deleteCustomer(long customerId) {
-        this.deleteById(customerId);
+        Customer customer = getCustomerById(customerId);
+        sessionFactory.getCurrentSession().delete(customer);
     }
 }

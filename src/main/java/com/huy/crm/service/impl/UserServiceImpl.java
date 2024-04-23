@@ -1,9 +1,9 @@
 package com.huy.crm.service.impl;
 
-
 import com.huy.crm.dao.RoleDAO;
 import com.huy.crm.dao.UserDAO;
 import com.huy.crm.dto.UserDto;
+import com.huy.crm.dto.UserParams;
 import com.huy.crm.entity.Role;
 import com.huy.crm.entity.UserEntity;
 import com.huy.crm.service.UserService;
@@ -11,7 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,8 +28,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getAllUsers() {
-        List<UserEntity> userEntities = userDAO.getAllUsers();
+    @Transactional
+    public List<UserDto> getAllUsers(UserParams userParams) {
+        List<UserEntity> userEntities = userDAO.getAllUsers(userParams);
 
         return userEntities.stream()
                 .map(this::convertToDto)
@@ -39,11 +39,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Optional<UserEntity> findByUserName(String username) {
-        UserEntity userEntity = userDAO.findByUserName(username);
+    public int getUsersCount(UserParams userParams) {
+        return userDAO.getUsersCount(userParams);
+    }
+
+    @Override
+    @Transactional
+    public Optional<UserDto> getUserById(long id) {
+        UserEntity userEntity = userDAO.getUserById(id);
 
         if (userEntity != null) {
-            return Optional.of(userEntity);
+            UserDto userDto = convertToDto(userEntity);
+            return Optional.of(userDto);
         }
 
         return Optional.empty();
@@ -51,11 +58,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Optional<UserEntity> findByEmail(String email) {
+    public Optional<UserDto> findByUserName(String username) {
+        UserEntity userEntity = userDAO.findByUserName(username);
+
+        if (userEntity != null) {
+            UserDto userDto = convertToDto(userEntity);
+            return Optional.of(userDto);
+        }
+
+        return Optional.empty();
+    }
+
+    @Override
+    @Transactional
+    public Optional<UserDto> findByEmail(String email) {
         UserEntity userEntity = userDAO.findByEmail(email);
 
         if (userEntity != null) {
-            return Optional.of(userEntity);
+            UserDto userDto = convertToDto(userEntity);
+            return Optional.of(userDto);
         }
 
         return Optional.empty();
@@ -66,15 +87,26 @@ public class UserServiceImpl implements UserService {
     public void saveUser(UserDto userDto) {
         UserEntity userEntity = convertToEntity(userDto);
 
-        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
-
-        if (userEntity.getRoles() == null) {
-            List<Role> roles = new ArrayList<>();
-            roles.add(roleDAO.findRoleByName("ROLE_USER"));
-            userEntity.setRoles(roles);
+        if (userEntity.getId() != 0) {
+            String hashedPassword = userDAO.getHashedPassword(userEntity.getId());
+            userEntity.setPassword(hashedPassword);
+        } else {
+            userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
         }
 
         userDAO.saveUser(userEntity);
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(long id) {
+        UserEntity userEntity = userDAO.getUserById(id);
+
+        if (userEntity != null) {
+            userEntity.getRoles().clear();
+            userDAO.saveUser(userEntity);
+            userDAO.deleteUser(id);
+        }
     }
 
     @Override
@@ -93,18 +125,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity convertToEntity(UserDto userDto) {
+        List<Role> roles = roleDAO.findRoleByUserId(userDto.getId());
 
-        List<Role> roles;
-
-        if (!userDto.getRoles().isEmpty()) {
+        if (userDto.getRoles() != null && !userDto.getRoles().isEmpty()) {
             roles = userDto.getRoles().stream()
                     .map(roleDAO::findRoleByName)
                     .collect(Collectors.toList());
-        } else {
-            roles = roleDAO.findRoleByUserId(userDto.getId());
-            if (roles.isEmpty()) {
-                roles.add(roleDAO.findRoleByName("ROLE_USER"));
-            }
+        }
+
+        if (roles.isEmpty()) {
+            roles.add(roleDAO.findRoleByName("ROLE_USER"));
         }
 
         return UserEntity.builder()
@@ -114,7 +144,7 @@ public class UserServiceImpl implements UserService {
                 .password(userDto.getPassword())
                 .imageUrl(userDto.getImageUrl())
                 .roles(roles)
-                .enabled(true)
+                .enabled(userDto.isEnabled())
                 .build();
     }
 }

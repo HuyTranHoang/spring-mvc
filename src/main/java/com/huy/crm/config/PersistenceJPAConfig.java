@@ -1,21 +1,17 @@
 package com.huy.crm.config;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
 import java.util.Properties;
 
-@Configuration
-@EnableTransactionManagement
+
 public class PersistenceJPAConfig {
 
     private Properties additionalProperties() {
@@ -26,7 +22,6 @@ public class PersistenceJPAConfig {
         return hibernateProperties;
     }
 
-    @Bean
     public DataSource dataSource() throws PropertyVetoException {
         ComboPooledDataSource dataSource = new ComboPooledDataSource();
         dataSource.setDriverClass("com.mysql.cj.jdbc.Driver");
@@ -36,7 +31,6 @@ public class PersistenceJPAConfig {
         return dataSource;
     }
 
-    @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() throws PropertyVetoException {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
@@ -49,7 +43,6 @@ public class PersistenceJPAConfig {
         return em;
     }
 
-    @Bean
     public PlatformTransactionManager transactionManager() throws PropertyVetoException {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());

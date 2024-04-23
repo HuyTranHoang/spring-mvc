@@ -6,6 +6,7 @@ import com.huy.crm.entity.Role;
 import com.huy.crm.service.RoleService;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +19,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Transactional
     public List<RoleDto> getAllRoles() {
         List<Role> roles = roleDAO.getAllRoles();
 

@@ -23,14 +23,16 @@
             <h3 class="h3 mb-0 text-primary"
                 th:text="${userDto.id == 0 ? 'Add new user' : 'Update user'}"></h3>
 
-            <a th:href="@{/user/list}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-                <i class="fa-solid fa-arrow-left mr-2"></i> Back to list
+            <a th:href="@{/user/list}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm text-center">
+                <i class="fa-solid fa-arrow-left mr-2" style="line-height: 23px"></i>
+                Back to list
             </a>
         </div>
 
         <hr>
 
-        <form th:action="@{/user/save}" th:object="${userDto}" method="post" class="myForm needs-validation">
+        <form th:action="@{|/user/${action}|}" th:with="action = ${userDto.id == 0 ? 'create' : 'update'}"
+              th:object="${userDto}" method="post" class="myForm needs-validation">
 
             <input type="hidden" th:field="*{id}">
 
@@ -57,7 +59,7 @@
                 </div>
             </div>
 
-            <div class="row p-3">
+            <div th:if="${userDto.id == 0}" class="row p-3">
                 <label for="password" class="col-sm-3 col-form-label text-right">
                     Password <small class="text-danger">*</small>
                 </label>
@@ -69,7 +71,7 @@
                 </div>
             </div>
 
-            <div class="row p-3">
+            <div th:if="${userDto.id == 0}" class="row p-3">
                 <label for="confirmPassword" class="col-sm-3 col-form-label text-right">
                     Confirm password <small class="text-danger">*</small>
                 </label>
@@ -83,13 +85,33 @@
 
             <div class="row p-3">
                 <label class="col-sm-3 col-form-label text-right">
-                    Roles <small class="text-danger">*</small>
+                    Roles
                 </label>
                 <div class="col-sm-9">
                     <div th:each="role : ${roles}" class="form-check">
                         <input th:field="*{roles}" th:value="${role.name}" th:id="${role.id}" class="form-check-input"
                                type="checkbox">
                         <label th:text="${role.name}" th:for="${role.id}" class="form-check-label"></label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row p-3">
+                <label class="col-sm-3 col-form-label text-right">
+                    Enabled <small class="text-danger">*</small>
+                </label>
+                <div class="col-sm-9">
+                    <div class="form-check">
+                        <input th:field="*{enabled}" th:value="true" class="form-check-input" type="radio" id="enabled-yes">
+                        <label class="form-check-label" for="enabled-yes">
+                            Yes
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input th:field="*{enabled}" th:value="false" class="form-check-input" type="radio" id="enabled-no">
+                        <label class="form-check-label" for="enabled-no">
+                            No
+                        </label>
                     </div>
                 </div>
             </div>
@@ -106,11 +128,18 @@
 
 <script layout:fragment="myScript">
     $(function () {
+
+        jQuery.validator.addMethod("usernameRegex", function(value, element) {
+            return this.optional(element) || /^[a-zA-Z0-9_]+$/.test(value);
+        }, "Username must contain only letters, numbers, or underscores.");
+
+
         $('.myForm').validate({
             rules: {
                 username: {
                     required: true,
-                    minlength: 2
+                    minlength: 2,
+                    usernameRegex: true
                 },
                 email: {
                     required: true,
@@ -127,8 +156,9 @@
             },
             messages: {
                 username: {
-                    required: 'First name is required.',
-                    minlength: 'First name must be at least 3 characters.'
+                    required: 'Username is required.',
+                    minlength: 'Username must be at least 2 characters.',
+                    usernameRegex: 'Username must contain only letters, numbers, or underscores.'
                 },
                 email: {
                     required: 'Email is required.',

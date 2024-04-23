@@ -15,21 +15,23 @@
 
     <div class="divider"></div>
 
-        <form class="d-flex form-inline mr-auto my-2 my-md-0 mw-100 navbar-search" id="searchForm">
-            <div class="input-group mr-3">
-                <input type="text" name="search" class="form-control small" placeholder="Search for...">
-                <div class="input-group-append">
-                    <button class="btn btn-primary" type="submit">
-                        <i class="fas fa-search fa-sm"></i>
-                    </button>
-                </div>
+    <form class="d-flex form-inline mr-auto my-2 my-md-0 mw-100 navbar-search" id="searchForm"
+          th:object="${userParams}">
+        <div class="input-group mr-3">
+            <input type="text" name="search" class="form-control small" placeholder="Search for..."
+                   th:field="*{search}">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                    <i class="fas fa-search fa-sm"></i>
+                </button>
             </div>
+        </div>
 
-            <input type="hidden">
+        <input type="hidden" th:field="*{sort}">
 
-            <a th:if="${!#strings.isEmpty(param.search) and #strings.length(param.search) > 0}" th:href="@{/user/list}"
-               class="btn btn-warning">Clear</a>
-        </form>
+        <a th:if="${!#strings.isEmpty(param.search) and #strings.length(param.search) > 0}" th:href="@{/user/list}"
+           class="btn btn-warning">Clear</a>
+    </form>
 
     <a th:href="@{new}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
         <i class="fa-solid fa-plus"></i> Create new user</a>
@@ -39,19 +41,37 @@
     <div>
         <table class="table table-striped">
             <thead class="table-primary">
-            <tr>
+            <tr th:with="userColmn = ${T(com.huy.crm.constant.SortUserColumn)}, sort = ${param.sort != null ? param.sort : 'id'}">
                 <th scope="col">#</th>
-                <th scope="col" style="width: 25%">
-                    Username
+                <th scope="col" style="width: 25%"
+                    th:with="isUserNameAsc = ${#strings.equals(sort, userColmn.USERNAME_ASC)}">
+                    <a th:href="@{list(page=1,sort=${isUserNameAsc ? userColmn.USERNAME_DESC : userColmn.USERNAME_ASC},search=${userParams.search})}"
+                       th:class="${#strings.contains(sort, 'username')} ? 'text-primary' : 'text-gray-600'">
+                        Username
+                        <i class="fa-solid"
+                           th:classappend="${isUserNameAsc ? 'fa-arrow-up-wide-short' : 'fa-arrow-down-wide-short'}"></i>
+                    </a>
                 </th>
-                <th scope="col" style="width: 25%">
-                    Email
+                <th scope="col" style="width: 25%"
+                    th:with="isEmailAsc = ${#strings.equals(sort, userColmn.EMAIL_ASC)}">
+                    <a th:href="@{list(page=1,sort=${isEmailAsc ? userColmn.EMAIL_DESC : userColmn.EMAIL_ASC},search=${userParams.search})}"
+                       th:class="${#strings.contains(sort, 'email')} ? 'text-primary' : 'text-gray-600'">
+                        Email
+                        <i class="fa-solid"
+                           th:classappend="${isEmailAsc ? 'fa-arrow-up-wide-short' : 'fa-arrow-down-wide-short'}"></i>
+                    </a>
                 </th>
                 <th scope="col" style="width: 25%">
                     Roles
                 </th>
-                <th scope="col" style="width: 15%">
-                    Enabled
+                <th scope="col" style="width: 15%"
+                    th:with="isEnabledAsc = ${#strings.equals(sort, userColmn.ENABLED_ASC)}">
+                    <a th:href="@{list(page=1,sort=${isEnabledAsc ? userColmn.ENABLED_DESC : userColmn.ENABLED_ASC},search=${userParams.search})}"
+                       th:class="${#strings.contains(sort, 'enabled')} ? 'text-primary' : 'text-gray-600'">
+                        Enabled
+                        <i class="fa-solid"
+                           th:classappend="${isEnabledAsc ? 'fa-arrow-up-wide-short' : 'fa-arrow-down-wide-short'}"></i>
+                    </a>
                 </th>
                 <th scope="col" style="width: 10%">Actions</th>
             </tr>
@@ -99,6 +119,51 @@
             </tr>
             </tbody>
         </table>
+    </div>
+
+    <div class="d-flex justify-content-between">
+        <div>
+            <span>Showing</span>
+            <span th:text="${(userParams.page - 1) * userParams.pageSize + 1}"></span>
+            <span>-</span>
+
+            <span th:text="${(userParams.page - 1) * userParams.pageSize + users.size()}"></span>
+            <span>of</span>
+            <span th:text="${totalCount}"></span>
+            <span>records</span>
+        </div>
+
+        <nav th:if="${totalPages > 1}" aria-label="Page navigation">
+            <ul class="pagination" th:with="sort=${userParams.sort}, search=${userParams.search}">
+                <li class="page-item" th:classappend="${userParams.page == 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{list(page=1,sort=${sort},search=${search})}">
+                        <i class="fa-solid fa-angles-left"></i>
+                    </a>
+                </li>
+                <li class="page-item" th:classappend="${userParams.page == 1} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="@{list(page=${userParams.page - 1},sort=${sort},search=${search})}">
+                        <i class="fa-solid fa-angle-left"></i>
+                    </a>
+                </li>
+                <li class="page-item" th:classappend="${userParams.page == i} ? 'active'"
+                    th:each="i: ${#numbers.sequence(1, totalPages)}">
+                    <a class="page-link" th:href="@{list(page=${i},sort=${sort},search=${search})}"
+                       th:text="${i}"></a>
+                </li>
+                <li class="page-item" th:classappend="${userParams.page == totalPages} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="@{list(page=${userParams.page + 1},sort=${sort},search=${search})}">
+                        <i class="fa-solid fa-angle-right"></i>
+                    </a>
+                </li>
+                <li class="page-item" th:classappend="${userParams.page == totalPages} ? 'disabled'">
+                    <a class="page-link" th:href="@{list(page=${totalPages},sort=${sort},search=${search})}">
+                        <i class="fa-solid fa-angles-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
 
     <form id="deleteForm" method="post" th:action="@{/user/delete}"></form>
